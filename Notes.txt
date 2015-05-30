@@ -1,0 +1,9 @@
+Permissons
+
+//you will not be able to read or write to the serial ports with out the permissons
+https://groups.google.com/a/chromium.org/forum/#!topic/chromium-apps/e9qKDGwHMus
+
+long story short, on linux do this
+sudo adduser USERNAME dialout
+
+where USERNAME is your username :)
