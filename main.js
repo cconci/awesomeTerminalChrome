@@ -1,5 +1,5 @@
 /*******************************************************************************
-Stuff
+Awesome Terminal
 cconci
 *******************************************************************************/
 
@@ -160,7 +160,7 @@ function arrayAlementsToString(arrayData){
 function padByteString(stringData){
 
   /*
-  js jas not string padding?????
+  js has not string padding fxn?????
   */
 
   //console.log(stringData.length +'\n');
