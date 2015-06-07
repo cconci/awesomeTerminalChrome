@@ -12,6 +12,9 @@ window.onload = function() {
   
   update_ports();
 
+  //Show the version on the header
+  document.querySelector('#pageTitle').innerHTML = "Awesome Terminal Chrome V"+chrome.runtime.getManifest().version;
+
   console.log("window.onload");
 };
 
@@ -19,7 +22,7 @@ function window_bounds_changed(){
   console.log("Windows bounds have changed");
 }
 
-function update_ports(){
+function update_ports(){ 
   /*
     var serial = new Serial('test1');
     

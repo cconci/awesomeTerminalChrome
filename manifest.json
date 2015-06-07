@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "A-Term Chrome",
-  "short_name": "ATerm_Chrome",
-  "description": "",
-  "version": "0.0.1",
+  "name": "Awesome Terminal",
+  "short_name": "Awesome Terminal",
+  "description": "Serial Port communications, send and receive data via serial ports",
+  "version": "1.0.0",
   "minimum_chrome_version": "38",
 
   "permissions": [
