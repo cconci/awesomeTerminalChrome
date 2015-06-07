@@ -18,11 +18,11 @@ window.onload = function() {
   console.log("window.onload");
 };
 
-function window_bounds_changed(){
+function window_bounds_changed() {
   console.log("Windows bounds have changed");
 }
 
-function update_ports(){ 
+function update_ports() { 
   /*
     var serial = new Serial('test1');
     
@@ -64,7 +64,7 @@ function update_ports(){
 
 var connectionId;
 
-function connect_to_port(){
+function connect_to_port() {
   
   console.log("Connecting to port");
   
@@ -80,12 +80,10 @@ function connect_to_port(){
   var parityBitVal = document.querySelector('#ParityBitList').value;
   var stopBitsVal = document.querySelector('#StopBitsList').value;
   
-  if(document.querySelector('#baudRatesList').value == "Other")
-  {
+  if(document.querySelector('#baudRatesList').value == "Other") {
     baudRate = parseInt(document.querySelector('#customBaudRate').value);
   }
-  else
-  {
+  else {
     baudRate = parseInt(document.querySelector('#baudRatesList').value);
   }
   
@@ -121,7 +119,7 @@ function connect_to_port(){
   
 }
 
-function read_data_callback(info){
+function read_data_callback(info) {
   console.log("read_data_callback():stuff");
   console.log(info);
   console.log(String.fromCharCode.apply(null, new Uint8Array(info.data)));
@@ -132,7 +130,7 @@ function read_data_callback(info){
   document.querySelector('#termRX').value += arrayAlementsToString(uint8View);
 }
 
-function send_data(byteBuffer){
+function send_data(byteBuffer) {
   
   var uint8View = new Uint8Array(byteBuffer);
   
@@ -144,11 +142,11 @@ function send_data(byteBuffer){
   }
 }
 
-function arrayAlementsToString(arrayData){
+function arrayAlementsToString(arrayData) {
   
   var output = "";
   
-  for(i=0;i<arrayData.byteLength;i++){
+  for(i=0;i<arrayData.byteLength;i++) {
     output += padByteString(arrayData[i]+"")+" ";
     
   }
@@ -157,7 +155,7 @@ function arrayAlementsToString(arrayData){
   
 }
 
-function padByteString(stringData){
+function padByteString(stringData) {
 
   /*
   js has not string padding fxn?????

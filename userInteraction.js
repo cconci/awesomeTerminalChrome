@@ -58,12 +58,12 @@ document.querySelector('#buttonRefreshPorts').onclick = function() {
 
 document.querySelector('#baudRatesList').onchange = function() {
   
-  if(document.querySelector('#baudRatesList').value == "Other"){
+  if(document.querySelector('#baudRatesList').value == "Other") {
     //we reveal the text box
     document.querySelector('#customBaudRate').style.display = "";
   }
-  else{
-    //why hide the text box
+  else {
+    //we hide the text box
     document.querySelector('#customBaudRate').style.display = "none";
   }
   
@@ -73,10 +73,10 @@ document.querySelector('#baudRatesList').onchange = function() {
 document.querySelector('#buttonAdvancedOptions').onclick = function() {
     
     //
-    if(document.querySelector('#divAdvancedOptions').style.display === ""){
+    if(document.querySelector('#divAdvancedOptions').style.display === "") {
       document.querySelector('#divAdvancedOptions').style.display = "none";
     }
-    else{
+    else {
       document.querySelector('#divAdvancedOptions').style.display = "";
       //change button text to hide advanced options etc...
     }
