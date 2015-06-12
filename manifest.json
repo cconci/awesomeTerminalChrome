@@ -3,7 +3,7 @@
   "name": "Awesome Terminal",
   "short_name": "Awesome Terminal",
   "description": "Serial Port communications, send and receive data via serial ports",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minimum_chrome_version": "38",
 
   "permissions": [

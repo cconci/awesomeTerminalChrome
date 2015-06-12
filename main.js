@@ -15,7 +15,11 @@ window.onload = function() {
   //Show the version on the header
   document.querySelector('#pageTitle').innerHTML = "Awesome Terminal Chrome V"+chrome.runtime.getManifest().version;
 
-  console.log("window.onload");
+  console.log("window.onload "+Date()+"");
+  
+  
+  //add the recive listener
+  chrome.serial.onReceive.addListener(read_data_callback);
 };
 
 function window_bounds_changed() {
@@ -54,6 +58,7 @@ function update_ports() {
       
     }
     else {
+      document.querySelector('#portInfo').style.color = "green";
       document.querySelector('#portInfo').innerHTML = "Number of ports found:" + portCount;
     }
   };
@@ -62,11 +67,16 @@ function update_ports() {
   
 }
 
-var connectionId;
+var connectionId = -1; //this should be an invalid ID
 
 function connect_to_port() {
   
   console.log("Connecting to port");
+  
+  //Check if we are connected first
+  //if(connectionId != -1) { 
+    disconnect_from_port();
+  //}
   
   /*
   def of all the params,
@@ -102,12 +112,17 @@ function connect_to_port() {
                   try {
                     connectionId = info.connectionId;
                   
-                    console.log('Connection opened with id: ' + connectionId + ', Bitrate: ' + info.bitrate);
+                    console.log('Connected on port '+port+', with id ' + connectionId + 'and Bitrate ' + info.bitrate);
                   
-                    //add the recive listener
-                    chrome.serial.onReceive.addListener(read_data_callback);
+                    document.querySelector('#portInfo').style.color = "green";
+                    document.querySelector('#portInfo').innerHTML = "Connection open ("+port+")";
+                    
                   } catch (e) {
                     console.log("Connect ERROR - check serial permisons on host");
+                    
+                    document.querySelector('#portInfo').style.color = "red";
+                    document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
+                    
                   }
               });
   } catch(e) {
@@ -115,8 +130,21 @@ function connect_to_port() {
     //console.log(e);
     console.log("Connect ERROR - check serial permisons on host");
     
+    document.querySelector('#portInfo').style.color = "red";
+    document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
+    
   }
   
+}
+
+function disconnect_from_port() {
+  
+  chrome.serial.disconnect(connectionId, function(result) {
+                
+                console.log('Connection with id: ' + connectionId + ' is now closed');
+            });
+            
+  //connectionId = -1;//set to invalid
 }
 
 function read_data_callback(info) {
