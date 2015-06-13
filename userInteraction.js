@@ -34,7 +34,7 @@ document.querySelector('#buttonInputTX').addEventListener("click", function() {
       
       send_data(byteBuffer);
       
-      document.querySelector('#termTX').value += (document.querySelector('#termInput').value +"\n");
+      document.querySelector('#termTX').value += (arrayAlementsToString(new Uint8Array(byteBuffer)) +"\n");
       
       //auto scroll
       var ta = document.getElementById('termTX');
