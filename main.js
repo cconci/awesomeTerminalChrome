@@ -3,6 +3,14 @@ Awesome Terminal
 cconci
 *******************************************************************************/
 
+
+var connectionId = -1;  //this should be an invalid ID
+var rxByteCount = 0;
+var txByteCount = 0;
+var rxPacketCount = 0;
+var txPacketCount = 0;
+var rxFilterXNumberOfBytesCount = 0;
+
 /*
 List all ports into drop down box on main page
 */
@@ -20,6 +28,8 @@ window.onload = function() {
   
   //add the recive listener
   chrome.serial.onReceive.addListener(read_data_callback);
+  
+  updateStatsCounters();
 };
 
 function window_bounds_changed() {
@@ -67,7 +77,6 @@ function update_ports() {
   
 }
 
-var connectionId = -1; //this should be an invalid ID
 
 function connect_to_port() {
   
@@ -154,88 +163,128 @@ function read_data_callback(info) {
   var uint8View = new Uint8Array(info.data);
   console.log(uint8View);
   
+  //stats
+  rxByteCount += uint8View.length;
+  
   //append the data to the RX Window
-  document.querySelector('#termRX').value += arrayAlementsToString(uint8View);
+  updateRXoutput(uint8View);
+  
+  //update stats on ui
+  updateStatsCounters();
 }
 
 function send_data(byteBuffer) {
   
   var uint8View = new Uint8Array(byteBuffer);
   
+  //stats
+  txByteCount += uint8View.length;
+  
   try {
     chrome.serial.send(connectionId, byteBuffer, function() {console.log('Write');});
   } catch(e) {
     //Error
     console.log("send_data() - ERROR");
-  }
-}
-
-function arrayAlementsToString(arrayData) {
-  
-  var output = "";
-  
-  for(i=0;i<arrayData.byteLength;i++) {
-    output += padByteString(arrayData[i].toString(16))+" "; //.toString(16); turns our int to a hex string
-    
+    document.querySelector('#portInfo').style.color = "red";
+    document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
   }
   
-  return output;
-  
+  updateStatsCounters();
 }
 
-function padByteString(stringData) {
-
-  /*
-  js has not string padding fxn?????
-  */
-
-  //console.log(stringData.length +'\n');
-
-  if(stringData.length === 1)
-    return "0"+stringData;
-  else
-    return stringData;  
+function updateStatsCounters()  {
+  
+  //update stats labels
+  
+  
+  document.querySelector('#txStatsByteCount').innerHTML = "TX Byte Count:"+ padStringLeft(txByteCount+"",4," ");
+  document.querySelector('#rxStatsByteCount').innerHTML = "RX Byte Count:"+ padStringLeft(rxByteCount+"",4," ");
   
 }
 
-function hexStringToByteArray(hexString) {
+function updateRXoutput(uint8View) {
   
-  /*
-  Convertes a string like 'AB 00 01 22 FF 10'
-  
-  to a Byte array
-  
-  var byteBuffer = new ArrayBuffer(9);
-  var byteBufferView   = new Int8Array(byteBuffer);
+  if(document.querySelector('#rxFormateOptionSelected').checked === true) {
     
-  byteBufferView[0] = 0xAB;
-  byteBufferView[1] = 0x00;
-  byteBufferView[2] = 0x01;
-  byteBufferView[3] = 0x22;
-  byteBufferView[4] = 0xFF;
-  byteBufferView[5] = 0x10;
-  byteBufferView[6] = '\n';
-  */
-  
-  
-  //step one sepeate the string data, explode on spaces
-  var splitHexString = hexString.split(' ');
-  
-  var byteBuffer = new ArrayBuffer(splitHexString.length);
-  //can not edit the ArrayBuffer, need to go through this method
-  var byteBufferView   = new Int8Array(byteBuffer);
-  
-  for(i=0;i<splitHexString.length;i++) {
+    /*
+    What options did the user select?
+    */
     
-    //form each byte 
-    //http://www.w3schools.com/jsref/jsref_parseint.asp
-    var byte = parseInt(splitHexString[i],'16'); //it is a hex string, thus 16
+    for(i=0;i<uint8View.length;i++) { 
     
-    byteBufferView[i] = byte;
+      var nByte = arrayAlementToString(uint8View[i]);
     
-    console.log(byte +'\n');
+      if(document.querySelector('#rxFormateOptionAfterByteRB').checked === true) {
+        
+        //use to string to show the value in hex (that is the way it is entered on the UI)
+        if(document.querySelector('#rxFormateOptionAfterByte').value === uint8View[i].toString(16)) {
+          
+          //after Byte, so we show the byte first
+          document.querySelector('#termRX').value += nByte;
+          
+          //show byte and put \n
+          document.querySelector('#termRX').value += "\n";
+          
+        }
+        else {
+          //Show byte
+          document.querySelector('#termRX').value += nByte;
+        }
+        
+      }
+      else if(document.querySelector('#rxFormateOptionBeforeByteRB').checked === true) {
+        
+        //use to string to show the value in hex (that is the way it is entered on the UI)
+        if(document.querySelector('#rxFormateOptionBeforeByte').value === uint8View[i].toString(16)) {
+          
+          //Befire Byte, so we show the \n first
+        
+          //show byte and put \n
+          document.querySelector('#termRX').value += "\n";
+          
+          //show byte
+          document.querySelector('#termRX').value += nByte;
+          
+        }
+        else {
+          //Show byte
+          document.querySelector('#termRX').value += nByte;
+        }
+        
+      }
+      else if(document.querySelector('#rxFormateOptionAfterTimeRB').checked === true) {
+        
+        
+      }
+      else if(document.querySelector('#rxFormateOptionAfterBytesRB').checked === true) {
+        
+        //X number of bytes filter
+        rxFilterXNumberOfBytesCount++;
+        
+        if(rxFilterXNumberOfBytesCount >= document.querySelector('#rxFormateOptionAfterBytes').value) {
+          
+          document.querySelector('#termRX').value += "\n";
+          
+          document.querySelector('#termRX').value += nByte;
+          
+          rxFilterXNumberOfBytesCount = 0;//zero the counter
+        }
+        else {
+          document.querySelector('#termRX').value += nByte;
+        }
+        
+      }
+    }
     
   }
+  else {
   
-  return byteBuffer;
+    //just add to the output window
+    document.querySelector('#termRX').value += arrayAlementsToString(uint8View);
+  }
+  
+  //auto scroll
+  var ta = document.getElementById('termRX');
+  ta.scrollTop = ta.scrollHeight;
+  
 }

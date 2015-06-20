@@ -33,3 +33,11 @@ button:hover {
   left: 400px;
   
 }
+
+/*Right align text*/
+.statsCounter{
+  /*background-color: green;*/
+  width:98%; 
+  display:inline-block;
+  text-align:right;
+}

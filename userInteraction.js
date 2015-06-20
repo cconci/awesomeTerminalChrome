@@ -51,11 +51,23 @@ document.querySelector('#buttonTXClear').onclick = function() {
     
     //Clears the textbox
     document.querySelector('#termTX').value = "";
+    
+    txByteCount = 0;
+    
+    updateStatsCounters();
 };
 document.querySelector('#buttonRXClear').onclick = function() {
     
     //Clears the textbox
     document.querySelector('#termRX').value = "";
+    
+    //filter counter
+    rxFilterXNumberOfBytesCount = 0;
+    
+    //byte count
+    rxByteCount = 0;
+    
+    updateStatsCounters();
 };
 document.querySelector('#buttonRefreshPorts').onclick = function() {
     
