@@ -10,6 +10,8 @@ var txByteCount = 0;
 var rxPacketCount = 0;
 var txPacketCount = 0;
 var rxFilterXNumberOfBytesCount = 0;
+var rxFilterTimeBetweenBytesStart = new Date();
+var rxFilterShowDate = 0; //0 is no date on update
 
 /*
 List all ports into drop down box on main page
@@ -213,17 +215,25 @@ function updateRXoutput(uint8View) {
     for(i=0;i<uint8View.length;i++) { 
     
       var nByte = arrayAlementToString(uint8View[i]);
-    
+      
       if(document.querySelector('#rxFormateOptionAfterByteRB').checked === true) {
+      
+        if(rxFilterShowDate === 1) {
+          document.querySelector('#termRX').value += getRXRowIdentifier(true);
+          
+          rxFilterShowDate = 0; //clear
+        }
         
         //use to string to show the value in hex (that is the way it is entered on the UI)
-        if(document.querySelector('#rxFormateOptionAfterByte').value === uint8View[i].toString(16)) {
+        if(document.querySelector('#rxFormateOptionAfterByte').value.toLowerCase() === uint8View[i].toString(16)) {
           
           //after Byte, so we show the byte first
           document.querySelector('#termRX').value += nByte;
           
           //show byte and put \n
           document.querySelector('#termRX').value += "\n";
+          
+          rxFilterShowDate = 1;
           
         }
         else {
@@ -235,12 +245,15 @@ function updateRXoutput(uint8View) {
       else if(document.querySelector('#rxFormateOptionBeforeByteRB').checked === true) {
         
         //use to string to show the value in hex (that is the way it is entered on the UI)
-        if(document.querySelector('#rxFormateOptionBeforeByte').value === uint8View[i].toString(16)) {
+        if(document.querySelector('#rxFormateOptionBeforeByte').value.toLowerCase() === uint8View[i].toString(16)) {
           
           //Befire Byte, so we show the \n first
         
           //show byte and put \n
           document.querySelector('#termRX').value += "\n";
+          
+          //show row identifier
+          document.querySelector('#termRX').value += getRXRowIdentifier(true);
           
           //show byte
           document.querySelector('#termRX').value += nByte;
@@ -254,16 +267,39 @@ function updateRXoutput(uint8View) {
       }
       else if(document.querySelector('#rxFormateOptionAfterTimeRB').checked === true) {
         
+        var rxFilterTimeBetweenBytesEnd = new Date();
+        
+        var timeBetweenBytes = (rxFilterTimeBetweenBytesEnd - rxFilterTimeBetweenBytesStart);
+        
+        //update prevTime
+        rxFilterTimeBetweenBytesStart = rxFilterTimeBetweenBytesEnd;
+        
+        if(timeBetweenBytes > document.querySelector('#rxFormateOptionAfterTime').value) {
+          
+          document.querySelector('#termRX').value += "\n";
+          
+          document.querySelector('#termRX').value += getRXRowIdentifier(true);
+          
+          document.querySelector('#termRX').value += nByte;
+          
+        }
+        else {
+          
+          document.querySelector('#termRX').value += nByte;
+        }
         
       }
       else if(document.querySelector('#rxFormateOptionAfterBytesRB').checked === true) {
         
         //X number of bytes filter
-        rxFilterXNumberOfBytesCount++;
         
-        if(rxFilterXNumberOfBytesCount >= document.querySelector('#rxFormateOptionAfterBytes').value) {
+        
+        if(rxFilterXNumberOfBytesCount >= document.querySelector('#rxFormateOptionAfterBytes').value
+        || rxFilterXNumberOfBytesCount === 0 ) {
           
           document.querySelector('#termRX').value += "\n";
+          
+          document.querySelector('#termRX').value += getRXRowIdentifier(true);
           
           document.querySelector('#termRX').value += nByte;
           
@@ -273,6 +309,12 @@ function updateRXoutput(uint8View) {
           document.querySelector('#termRX').value += nByte;
         }
         
+        rxFilterXNumberOfBytesCount++;
+        
+      }
+      else {
+        //normal
+        document.querySelector('#termRX').value += arrayAlementsToString(uint8View);
       }
     }
     
@@ -286,5 +328,46 @@ function updateRXoutput(uint8View) {
   //auto scroll
   var ta = document.getElementById('termRX');
   ta.scrollTop = ta.scrollHeight;
+  
+}
+
+function getRXRowIdentifier(printSpacer) {
+  
+  //show the date stamp or other RX row id if the option is selected
+  
+  var date = new Date();
+  
+  var output = "";
+  
+  switch(document.querySelector('#DateTimeStampList').value) {
+    case "None":
+      //Hide
+      output = "";
+      break;
+    case "Local":
+      output = date.toString();
+      break;
+    case "Epoch":
+      output = (new Date().getTime());
+      break;
+    case "Custom 1":
+      
+      output = date.getFullYear()
+        +""+ padStringLeft((date.getMonth() + 1)  +"" ,2,"0") 
+        +""+ padStringLeft( date.getDate()        +"" ,2,"0")
+        +""+ padStringLeft( date.getHours()       +"" ,2,"0") 
+        +""+ padStringLeft( date.getMinutes()     +"" ,2,"0")
+        +""+ padStringLeft( date.getSeconds()     +"" ,2,"0");
+      break;
+     
+  }
+  
+  if(printSpacer === true
+    && output !== "") {
+    return output+" - ";
+  }
+  else {
+    return output;
+  }
   
 }

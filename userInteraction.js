@@ -156,39 +156,9 @@ document.querySelector('#rxFormateOptionAfterBytes').onchange = function() {
 
 document.querySelector('#DateTimeStampList').onchange = function() {
   
-  var date = new Date();
+  document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
+  document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
+  document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = getRXRowIdentifier();
   
-  switch(document.querySelector('#DateTimeStampList').value) {
-    case "None":
-      //Hide
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "none";
-      break;
-    case "Local":
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style = "color:blue;";
-      document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = date.toString();
-      break;
-    case "Epoch":
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
-      document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = (new Date().getTime());
-      break;
-    case "Custom 1":
-      
-      var output = date.getFullYear()
-        +""+ padStringLeft((date.getMonth() + 1)  +"" ,2,"0") 
-        +""+ padStringLeft( date.getDate()        +"" ,2,"0")
-        +""+ padStringLeft( date.getHours()       +"" ,2,"0") 
-        +""+ padStringLeft( date.getMinutes()     +"" ,2,"0")
-        +""+ padStringLeft( date.getSeconds()     +"" ,2,"0");
-
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
-      document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
-      document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = output;
-      break;
-     
-  }
-  
-
 };
 
