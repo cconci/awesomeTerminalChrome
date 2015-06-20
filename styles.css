@@ -20,3 +20,16 @@ button:hover {
   background: blue;
   box-shadow: 1px 1px 1px #0000FF;  
 }
+
+.rxOption {
+  position: absolute;
+  left: 300px;
+  /*padding: 10px 0px 10px 0px;*/
+}
+
+.rxOptionRadioButtons {
+  /*background-color: yellow;*/
+  position: absolute;
+  left: 400px;
+  
+}

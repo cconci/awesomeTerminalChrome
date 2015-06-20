@@ -90,8 +90,93 @@ document.querySelector('#buttonAdvancedOptions').onclick = function() {
     
 };
 
+document.querySelector('#buttonRXOptions').onclick = function() {
+    
+    //
+    if(document.querySelector('#divRXOptions').style.display === "") {
+      document.querySelector('#divRXOptions').style.display = "none";
+    }
+    else {
+      document.querySelector('#divRXOptions').style.display = "";
+      //change button text to hide advanced options etc...
+    }
+    
+};
+
 document.querySelector('#buttonConnectToPort').onclick = function() {
     
     //
     connect_to_port();
 };
+
+document.querySelector('#rxFormateOptionAfterByte').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#rxFormateOptionAfterByteRB').checked = true;
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#rxFormateOptionBeforeByte').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#rxFormateOptionBeforeByteRB').checked = true;
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#rxFormateOptionAfterTime').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#rxFormateOptionAfterTimeRB').checked = true;
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#rxFormateOptionAfterBytes').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#rxFormateOptionAfterBytesRB').checked = true;
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+
+};
+
+
+document.querySelector('#DateTimeStampList').onchange = function() {
+  
+  var date = new Date();
+  
+  switch(document.querySelector('#DateTimeStampList').value) {
+    case "None":
+      //Hide
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "none";
+      break;
+    case "Local":
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style = "color:blue;";
+      document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = date.toString();
+      break;
+    case "Epoch":
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
+      document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = (new Date().getTime());
+      break;
+    case "Custom 1":
+      
+      var output = date.getFullYear()
+        +""+ padStringLeft((date.getMonth() + 1)  +"" ,2,"0") 
+        +""+ padStringLeft( date.getDate()        +"" ,2,"0")
+        +""+ padStringLeft( date.getHours()       +"" ,2,"0") 
+        +""+ padStringLeft( date.getMinutes()     +"" ,2,"0")
+        +""+ padStringLeft( date.getSeconds()     +"" ,2,"0");
+
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
+      document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
+      document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = output;
+      break;
+     
+  }
+  
+
+};
+

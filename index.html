@@ -83,6 +83,40 @@
   <button id="buttonTXClear" type="button" >Clear TX</button>
   <!-- ############################################################## -->
   <h2>RX</h2>
+  <button id="buttonRXOptions" type="button" >RX Options</button>
+  <div id="divRXOptions" style="display: none;">
+    <hr>
+    
+    <h3>Format RX input with a new line,</h3>
+      <p> - After Byte with value 'X' received (HEX):              
+        <input class = "rxOption"             id ="rxFormateOptionAfterByte"  title="this is 'X'" type="text" name="aByte" maxlength="2" size="4">
+        <input class = "rxOptionRadioButtons" id ="rxFormateOptionAfterByteRB" type="radio" name="rxOptionsSelect" value="abv">
+      </p>
+      <p> - Before Byte with value 'X' received (HEX):             
+        <input class = "rxOption"             id ="rxFormateOptionBeforeByte" title="this is 'X'" type="text" name="bByte" maxlength="2" size="4">
+        <input class = "rxOptionRadioButtons" id ="rxFormateOptionBeforeByteRB" type="radio" name="rxOptionsSelect" value="bbv">
+        </p>
+      <p> - After 'X' milliseconds from last byte received (DEC):  
+        <input class = "rxOption"             id ="rxFormateOptionAfterTime"  title="this is 'X'" type="text" name="ASecs" maxlength="2" size="4">
+        <input class = "rxOptionRadioButtons" id ="rxFormateOptionAfterTimeRB" type="radio" name="rxOptionsSelect" value="axs">
+      </p>
+      <p> - After 'X' bytes received (DEC):                        
+        <input class = "rxOption"             id ="rxFormateOptionAfterBytes" title="this is 'X'" type="text" name="ASecs" maxlength="2" size="4">
+        <input class = "rxOptionRadioButtons" id ="rxFormateOptionAfterBytesRB" type="radio" name="rxOptionsSelect" value="axs">
+      </p>
+      <p> * Append date time stamp:
+        <select class = "rxOption" id="DateTimeStampList">
+          <option value="None">None</option>
+          <option value="Local">Local</option>
+          <option value="Epoch">Epoch</option>
+          <option value="Custom 1">Custom 1</option>
+        </select> 
+        <span class = "rxOptionRadioButtons" style="display: none;" id="rxFormateOptionExampleTimeStamp"></span>
+        
+      </p>
+      Use RX formating options:<input class = "rxOption" type="checkbox" id="rxFormateOptionSelected" name="rxFormateOptionSelected" value="x">
+    <hr>
+  </div>
   <p>
     <textarea id ="termRX" rows="4" cols="80" disabled></textarea>
   </p>
@@ -92,6 +126,8 @@
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="serialHandler.js"></script>
   <script type="text/javascript" src="userInteraction.js"></script>
+  <script type="text/javascript" src="stringFxn.js"></script>
+  
   
 <ol id="demo"></ol>
 
