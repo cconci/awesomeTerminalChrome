@@ -10,8 +10,10 @@ var txByteCount = 0;
 var rxPacketCount = 0;
 var txPacketCount = 0;
 var rxFilterXNumberOfBytesCount = 0;
-var rxFilterTimeBetweenBytesStart = new Date();
+var rxFilterTimeBetweenBytesStart = (new Date()).getTime(); //gives us ms since 1/1/1970
 var rxFilterShowDate = 0; //0 is no date on update
+
+var currentFontSize = 15;
 
 /*
 List all ports into drop down box on main page
@@ -32,6 +34,11 @@ window.onload = function() {
   chrome.serial.onReceive.addListener(read_data_callback);
   
   updateStatsCounters();
+  
+  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
+  
 };
 
 function window_bounds_changed() {
@@ -267,9 +274,11 @@ function updateRXoutput(uint8View) {
       }
       else if(document.querySelector('#rxFormateOptionAfterTimeRB').checked === true) {
         
-        var rxFilterTimeBetweenBytesEnd = new Date();
+        var rxFilterTimeBetweenBytesEnd = (new Date()).getTime();
         
         var timeBetweenBytes = (rxFilterTimeBetweenBytesEnd - rxFilterTimeBetweenBytesStart);
+        
+        //console.log(timeBetweenBytes+"="+rxFilterTimeBetweenBytesEnd+"-"+rxFilterTimeBetweenBytesStart);
         
         //update prevTime
         rxFilterTimeBetweenBytesStart = rxFilterTimeBetweenBytesEnd;

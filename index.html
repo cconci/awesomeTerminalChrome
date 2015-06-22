@@ -34,7 +34,9 @@
     </select> <input type="number" id="customBaudRate" style="display: none;" />
   </p>
   <button id="buttonAdvancedOptions"    type="button" >Advanced Options</button>
+  <button id="UIOptions"    type="button" >UI Options</button>
   <div id="divAdvancedOptions" style="display: none;">
+    <hr>
     <p>
       DataBits
       <select id="DataBitsList">
@@ -57,6 +59,16 @@
       <option value="two">two</option>
       </select>        
     </p>
+    <hr>
+  </div>
+  <div id="divUIOptions" style="display: none;">
+    <hr>
+    UI Options
+    <p>
+    FONT: <button id="buttonFontP"    type="button" >Font+</button>
+    <button id="buttonFontN"    type="button" >Font-</button>
+    </p>
+    <hr>
   </div>
   
   <p>
@@ -110,7 +122,7 @@
         <select class = "rxOption" id="DateTimeStampList">
           <option value="None">None</option>
           <option value="Local">Local</option>
-          <option value="Epoch">Epoch</option>
+          <option value="Epoch">Epoch(ms)</option>
           <option value="Custom 1">Custom 1</option>
         </select> 
         <span class = "rxOptionRadioButtons" style="display: none;" id="rxFormateOptionExampleTimeStamp"></span>

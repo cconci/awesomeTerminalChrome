@@ -115,11 +115,45 @@ document.querySelector('#buttonRXOptions').onclick = function() {
     
 };
 
+document.querySelector('#buttonFontP').onclick = function() {
+    
+  //
+  currentFontSize++;
+  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
+   
+};
+
+document.querySelector('#buttonFontN').onclick = function() {
+    
+  //
+  currentFontSize--;
+  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
+    
+};
+
 document.querySelector('#buttonConnectToPort').onclick = function() {
     
     //
     connect_to_port();
 };
+
+
+document.querySelector('#UIOptions').onclick = function() {
+    
+    if(document.querySelector('#divUIOptions').style.display === "") {
+      document.querySelector('#divUIOptions').style.display = "none";
+    }
+    else {
+      document.querySelector('#divUIOptions').style.display = "";
+      //change button text to hide advanced options etc...
+    }  
+    
+};
+
 
 document.querySelector('#rxFormateOptionAfterByte').onchange = function() {
   
