@@ -89,15 +89,20 @@
   <button id="buttonInputClear" type="button" >Clear</button>
   <!-- ############################################################## -->
   <h2>TX</h2>
-  <span class = "statsCounter" style="" id="txStatsByteCount">TX Byte count: NA</span>
+  <button id="buttonTXOptions" type="button" >TX Options</button>
+  <span style="float: right;" style="" id="txStatsByteCount">TX Byte count: NA</span>
   <p>
-    <textarea id ="termTX" rows="4" cols="80" disabled></textarea>
+    <textarea id ="termTX" rows="4" cols="80" spellcheck="false" disabled></textarea>
   </p>
   <button id="buttonTXClear" type="button" >Clear TX</button>
+  <button id="buttonTXCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
+   
   <!-- ############################################################## -->
   <h2>RX</h2>
-  <span class = "statsCounter" style="" id="rxStatsByteCount">RX Byte count: NA</span>
+  
   <button id="buttonRXOptions" type="button" >RX Options</button>
+  <span style="float: right;" style="" id="rxStatsByteCount">RX Byte count: NA</span>
+  
   <div id="divRXOptions" style="display: none;">
     <hr>
     
@@ -132,9 +137,10 @@
     <hr>
   </div>
   <p>
-    <textarea id ="termRX" rows="4" cols="80" disabled></textarea>
+    <textarea id ="termRX" rows="4" cols="80" spellcheck="false" disabled></textarea>
   </p>
   <button id="buttonRXClear" type="button" >Clear RX</button>
+  <button id="buttonRXCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   <!-- ############################################################## -->
 
   <script type="text/javascript" src="main.js"></script>

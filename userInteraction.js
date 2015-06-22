@@ -196,3 +196,30 @@ document.querySelector('#DateTimeStampList').onchange = function() {
   
 };
 
+
+document.querySelector('#buttonTXCopyToCB').onclick = function() {
+  
+  //need to enabel or I can not select
+  document.getElementById("termTX").disabled = false; 
+  
+  //select the textarea & copy to clipboard
+  document.getElementById("termTX").select();
+  document.execCommand('copy');
+  
+  //return to normal
+  document.getElementById("termTX").disabled = true;
+};
+
+document.querySelector('#buttonRXCopyToCB').onclick = function() {
+  
+  //need to enabel or I can not select
+  document.getElementById("termRX").disabled = false; 
+  
+  //select the textarea & copy to clipboard
+  document.getElementById("termRX").select();
+  document.execCommand('copy');
+  
+  //return to normal
+  document.getElementById("termRX").disabled = true;
+};
+
