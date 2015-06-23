@@ -41,3 +41,17 @@ button:hover {
   display:inline-block;
   text-align:right;
 }
+
+/*
+based on h2
+http://www.w3.org/TR/html-markup/h2.html
+*/
+.customeHeadings {
+  /*display: block;*/
+  font-size: 1.5em;
+  margin-top: 0.30em;
+  margin-bottom: 0.50em;
+  margin-left: 0.0em;
+  margin-right: 0.0em;
+  font-weight: bold; 
+}
