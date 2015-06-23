@@ -223,3 +223,21 @@ document.querySelector('#buttonRXCopyToCB').onclick = function() {
   document.getElementById("termRX").disabled = true;
 };
 
+document.querySelector('#buttonRestoreView').onclick = function() {
+  
+  //restore view options to the textarea, if they have been dragged
+  
+  //from my css
+  document.querySelector('#termInput').style.width= "98%";
+  document.querySelector('#termInput').style.margin.left = "auto";
+  document.querySelector('#termInput').style.margin.right = "auto";
+
+  document.querySelector('#termTX').style.width= "98%";
+  document.querySelector('#termTX').style.margin.left = "auto";
+  document.querySelector('#termTX').style.margin.right = "auto";
+
+  document.querySelector('#termRX').style.width= "98%";
+  document.querySelector('#termRX').style.margin.left = "auto";
+  document.querySelector('#termRX').style.margin.right = "auto";
+  
+};

@@ -55,3 +55,10 @@ http://www.w3.org/TR/html-markup/h2.html
   margin-right: 0.0em;
   font-weight: bold; 
 }
+/*
+let me scroll in Y
+http://stackoverflow.com/questions/21979994/chrome-app-cannot-be-scroll
+*/
+html, body {
+    overflow-y: visible;
+}
