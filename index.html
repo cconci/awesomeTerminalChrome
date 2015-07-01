@@ -102,6 +102,45 @@
   
   <button id="buttonTXOptions" type="button" >TX Options</button>
   <span style="float: right;" style="" id="txStatsByteCount">TX Byte count: NA</span>
+  
+  <div id="divTXOptions" style="display: none;">
+    <hr>
+    <h3>TX user input multi-line options,</h3>
+      <p> - Time between sending rows 'X' ms (DEC):              
+        <input class = "rxOption"             id ="txInputMultiLinRowGapXms"  title="this is 'X'" type="text" maxlength="6" size="4" value="1000">
+      </p>    
+      <P>
+        *time between sending rows can also be added to a row e.g user input with a '| 100' will send the next row 100 ms after sending the current row <br>
+        "AA 00 89 FF CB FF | 1000" <br>
+        "AA 00 89 FF CB FF | 100"  <br>
+        "AA 00 89 FF CB FF | 1500" <br>
+      </p>
+    
+    <h3>TX user input,</h3>
+      <p> - Every 'X' ms (DEC):              
+        <input class = "rxOption"             id ="txInputEveryXms"  title="this is 'X'" type="text" maxlength="6" size="4" value="1000">
+        <input class = "rxOptionRadioButtons" id ="txInputEveryXmsRB" name="txInoutOptionsSelect" type="radio" >
+      </p>    
+      
+      <p> - 'X' number of times (DEC):              
+        <input class = "rxOption"             id ="txInputXtimes"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
+        <input class = "rxOptionRadioButtons" id ="txInputXtimesRB" name="txInoutOptionsSelect" type="radio" >
+      </p>  
+      
+      <p> - After Byte with value 'X' received (HEX):             
+        <input class = "rxOption"             id ="txInputXbyteRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
+        <input class = "rxOptionRadioButtons" id ="txInputXbyteRXRB" name="txInoutOptionsSelect" type="radio" >
+      </p>  
+      
+      <p> - After 'X' bytes received (DEC): 
+        <input class = "rxOption"             id ="txInputXbytesRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
+        <input class = "rxOptionRadioButtons" id ="txInputXbytesRXRB" name="txInoutOptionsSelect" type="radio" >
+      </p>
+      
+      Use TX options:<input class = "rxOption" type="checkbox" id="txInputOptionSelected" name="txInputOptionSelected" value="x">
+    <hr>
+  </div>
+  
   <p>
     <textarea id ="termTX" rows="4" cols="80" spellcheck="false" disabled></textarea>
   </p>

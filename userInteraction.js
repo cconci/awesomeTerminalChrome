@@ -115,6 +115,20 @@ document.querySelector('#buttonRXOptions').onclick = function() {
     
 };
 
+document.querySelector('#buttonTXOptions').onclick = function() {
+    
+  //
+  if(document.querySelector('#divTXOptions').style.display === "") {
+    document.querySelector('#divTXOptions').style.display = "none";
+  }
+  else {
+    document.querySelector('#divTXOptions').style.display = "";
+    //change button text to hide advanced options etc...
+  }
+    
+};
+
+
 document.querySelector('#buttonFontP').onclick = function() {
     
   //
