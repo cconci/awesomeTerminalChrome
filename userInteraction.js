@@ -3,35 +3,69 @@ Awesome Terminal
 cconci
 *******************************************************************************/
 
-document.querySelector('#buttonInputTX').addEventListener("click", function() {
+var txAutomateActive = false;
+var txAutomateCurrentRow = 0;
+
+document.querySelector('#buttonInputTX').onclick = function() {
     
   //sends data out the open port
-  //document.querySelector('#heading').innerHTML = "TX";
-  
-  //debug hardcoded send
-  //var byteBuffer = new ArrayBuffer(9);
-  
-  //cant edit the ArrayBuffer, ned to og through this method
-  //var byteBufferView   = new Int8Array(byteBuffer);
-  
-  //byteBufferView[0] = 0x40;
-  //byteBufferView[1] = 0x41;
-  //byteBufferView[2] = 0x42;
-  //byteBufferView[3] = 0x43;
-  //byteBufferView[4] = 0x44;
-  //byteBufferView[5] = 0x45;
-  //byteBufferView[6] = 0x46;
-  //byteBufferView[7] = 0x47;
-  //byteBufferView[8] = '\n';
-  
-  //send_data(byteBuffer);
   
   //add text in the user input as a row in the output
   if( (document.querySelector('#termInput').value).length > 0) {
     
     //convert the data in the termInput into a byteBuffer
-    var byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
+    var byteBuffer; 
     
+    //check if the user input is Multi line
+    if((document.querySelector('#termInput').value).includes("\n"))
+    {
+      console.log("User entered Multi Line input");
+     
+      txAutomateActive = true;
+      
+      //get the current Row
+      var splitTxEntry = (document.querySelector('#termInput').value).split('\n');
+      
+      if(txAutomateCurrentRow >= splitTxEntry.length)
+      {
+        //we are done
+        txAutomateActive = false;
+        txAutomateCurrentRow = 0;
+      }
+      else
+      {
+        
+        var nextTxTimeMS = 0;
+        //Does the row have a pre set time? (look for the |)
+        if(splitTxEntry[txAutomateCurrentRow].includes("|"))
+        {
+          //mark up for custome timing detected   '| X''     
+          
+          //set buffer to send with timing options stripped
+          byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
+        }
+        else
+        {
+          //set buffer to send
+          byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
+          
+          //use global setting
+          nextTxTimeMS = document.querySelector('#txInputMultiLinRowGapXms').value;
+        }
+        
+        setTimeout(document.querySelector('#buttonInputTX').onclick, nextTxTimeMS);
+        txAutomateCurrentRow++;//next row
+      }
+      
+      
+    }
+    else
+    {
+      
+      //normal
+      byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
+      
+    }
     send_data(byteBuffer);
     
     document.querySelector('#termTX').value += (arrayAlementsToString(new Uint8Array(byteBuffer)) +"\n");
@@ -41,7 +75,18 @@ document.querySelector('#buttonInputTX').addEventListener("click", function() {
     ta.scrollTop = ta.scrollHeight;
     
   }
-});
+};
+
+document.querySelector('#termInput').oninput = function() {
+  
+
+  var numberOfLines = ((document.querySelector('#termInput').value).split('\n')).length;
+    
+  //extend the user input box when enter is pressed
+  document.querySelector('#termInput').style.height = (numberOfLines*currentFontSize)+"px"; 
+
+};
+
 document.querySelector('#buttonInputClear').onclick = function() {
     
   //Clears the textbox
