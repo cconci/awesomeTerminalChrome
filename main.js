@@ -15,6 +15,11 @@ var rxFilterShowDate = 0; //0 is no date on update
 
 var currentFontSize = 15;
 
+var txAutomateActive = false;
+var txAutomateCurrentRow = 0;
+var txAutomateEnd = false;
+
+
 /*
 List all ports into drop down box on main page
 */
@@ -378,5 +383,109 @@ function getRXRowIdentifier(printSpacer) {
   else {
     return output;
   }
+  
+}
+
+function txUserInputInit(callType) {
+  
+  if(callType === 1 && txAutomateEnd === true) {
+    //we have stopped te uatomte calls
+    txAutomateEnd = false;
+    return;
+  }
+  else if(callType === 0 && txAutomateActive === true) {
+    
+    //user pressed TX button while in automate, so drop out
+    txAutomateActive = false;
+    txAutomateCurrentRow = 0;
+    txAutomateEnd = true;
+    //we are stopping the current TX operation
+    return;
+    
+  }
+  else {
+    //normal TX button press
+  }
+  
+  //tx the input
+  txUserInput();
+  
+}
+
+
+function txUserInput() { 
+  
+  //add text in the user input as a row in the output
+  if( (document.querySelector('#termInput').value).length > 0) {
+    
+    //convert the data in the termInput into a byteBuffer
+    var byteBuffer; 
+    
+    //check if the user input is Multi line
+    if((document.querySelector('#termInput').value).includes("\n"))
+    {
+      console.log("User entered Multi Line input");
+     
+      txAutomateActive = true;
+      
+      //get the current Row
+      var splitTxEntry = (document.querySelector('#termInput').value).split('\n');
+      
+      if(txAutomateCurrentRow >= splitTxEntry.length)
+      {
+        //we are done
+        txAutomateActive = false;
+        txAutomateCurrentRow = 0;
+        
+        return;
+      }
+      else
+      {
+        
+        var nextTxTimeMS = 1000;
+        //Does the row have a pre set time? (look for the |)
+        if(splitTxEntry[txAutomateCurrentRow].includes("|"))
+        {
+          //mark up for custome timing detected   '| X''     
+          
+          //set buffer to send with timing options stripped
+          byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
+        }
+        else
+        {
+          //set buffer to send
+          byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
+          
+          //use global setting
+          nextTxTimeMS = document.querySelector('#txInputMultiLinRowGapXms').value;
+        }
+        
+        txAutomateCurrentRow++;//next row
+        
+        //callback woth param
+        setTimeout(function() {
+          txUserInputInit(1);}, 
+          nextTxTimeMS);
+        
+      }
+      
+      
+    }
+    else
+    {
+      
+      //normal
+      byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
+      
+    }
+    send_data(byteBuffer);
+    
+    document.querySelector('#termTX').value += (arrayAlementsToString(new Uint8Array(byteBuffer)) +"\n");
+    
+    //auto scroll
+    var ta = document.getElementById('termTX');
+    ta.scrollTop = ta.scrollHeight;
+    
+  }  
   
 }
