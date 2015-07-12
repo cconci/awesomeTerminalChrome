@@ -18,6 +18,7 @@ var currentFontSize = 15;
 var txAutomateActive = false;
 var txAutomateCurrentRow = 0;
 var txAutomateEnd = false;
+var txAutomateCount = 0;
 
 
 /*
@@ -231,7 +232,7 @@ function updateRXoutput(uint8View) {
       if(document.querySelector('#rxFormateOptionAfterByteRB').checked === true) {
       
         if(rxFilterShowDate === 1) {
-          document.querySelector('#termRX').value += getRXRowIdentifier(true);
+          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
           
           rxFilterShowDate = 0; //clear
         }
@@ -265,7 +266,7 @@ function updateRXoutput(uint8View) {
           document.querySelector('#termRX').value += "\n";
           
           //show row identifier
-          document.querySelector('#termRX').value += getRXRowIdentifier(true);
+          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
           
           //show byte
           document.querySelector('#termRX').value += nByte;
@@ -292,7 +293,7 @@ function updateRXoutput(uint8View) {
           
           document.querySelector('#termRX').value += "\n";
           
-          document.querySelector('#termRX').value += getRXRowIdentifier(true);
+          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
           
           document.querySelector('#termRX').value += nByte;
           
@@ -313,7 +314,7 @@ function updateRXoutput(uint8View) {
           
           document.querySelector('#termRX').value += "\n";
           
-          document.querySelector('#termRX').value += getRXRowIdentifier(true);
+          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
           
           document.querySelector('#termRX').value += nByte;
           
@@ -345,7 +346,7 @@ function updateRXoutput(uint8View) {
   
 }
 
-function getRXRowIdentifier(printSpacer) {
+function getRowIdentifierText(txOrRxWindow,printSpacer) {
   
   //show the date stamp or other RX row id if the option is selected
   
@@ -353,7 +354,17 @@ function getRXRowIdentifier(printSpacer) {
   
   var output = "";
   
-  switch(document.querySelector('#DateTimeStampList').value) {
+  var selection;
+  
+  if(txOrRxWindow === 0) {
+    selection = document.querySelector('#rxDateTimeStampList').value;
+  }
+  else {
+    selection = document.querySelector('#txDateTimeStampList').value;
+  }
+    
+  
+  switch(selection) {
     case "None":
       //Hide
       output = "";
@@ -399,6 +410,7 @@ function txUserInputInit(callType) {
     txAutomateActive = false;
     txAutomateCurrentRow = 0;
     txAutomateEnd = true;
+    txAutomateCount = 0;
     //we are stopping the current TX operation
     return;
     
@@ -446,10 +458,14 @@ function txUserInput() {
         //Does the row have a pre set time? (look for the |)
         if(splitTxEntry[txAutomateCurrentRow].includes("|"))
         {
-          //mark up for custome timing detected   '| X''     
+          //mark up for custome timing detected   '| X''    
+          var splitTxEntryWithTiming = splitTxEntry[txAutomateCurrentRow].split('|');
           
           //set buffer to send with timing options stripped
-          byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
+          byteBuffer = hexStringToByteArray(splitTxEntryWithTiming[0]); //set the data
+          
+          nextTxTimeMS = splitTxEntryWithTiming[1]; //set the timing
+          
         }
         else
         {
@@ -463,8 +479,8 @@ function txUserInput() {
         txAutomateCurrentRow++;//next row
         
         //callback woth param
-        setTimeout(function() {
-          txUserInputInit(1);}, 
+        setTimeout(
+          function() {txUserInputInit(1);}, 
           nextTxTimeMS);
         
       }
@@ -477,9 +493,49 @@ function txUserInput() {
       //normal
       byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
       
+      //check if any of the repeat options are on,
+      if(document.querySelector('#txFormateOptionSelected').checked === true) {
+        
+        if(  document.querySelector('#txInputEveryXmsRB').checked === true) {
+          
+          //automate is on
+          txAutomateActive = true;
+          
+          //start count down till next tx
+          setTimeout(
+            function() { txUserInputInit(1);}, 
+            document.querySelector('#txInputEveryXms').value);
+        }
+        else if(document.querySelector('#txInputXtimesRB').checked === true) {
+        
+          if(txAutomateCount < document.querySelector('#txInputXtimes').value) {
+          
+            //automate is on
+            txAutomateActive = true;
+          
+            //start count down till next tx
+            setTimeout(
+              function() { txUserInputInit(1);}, 
+              document.querySelector('#txInputEveryXms').value);
+            
+            txAutomateCount++;
+          
+          }
+          else {
+            txAutomateCount = 0;
+            txAutomateActive = false;
+            
+            return;
+          }
+        }
+      }
     }
+    
     send_data(byteBuffer);
     
+    //row Identifier
+    document.querySelector('#termTX').value += getRowIdentifierText(1,true);
+    //Sent Data
     document.querySelector('#termTX').value += (arrayAlementsToString(new Uint8Array(byteBuffer)) +"\n");
     
     //auto scroll

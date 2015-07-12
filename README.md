@@ -1,5 +1,6 @@
 # awesomeTerminalChrome
 Chrome Extension/App serial terminal, send and receive data via COM ports with this application
 
-the extension is now available on the Chrome web store,
+this extension is now available on the Chrome web store,
 https://chrome.google.com/webstore/detail/awesome-terminal/kleldcepbkgbdfacicjceenddjjklpof
+

@@ -57,9 +57,11 @@ function hexStringToByteArray(hexString) {
   byteBufferView[6] = '\n';
   */
   
+  //strip spaces
+  var hexStringTrim = hexString.trim();
   
   //step one sepeate the string data, explode on spaces
-  var splitHexString = hexString.split(' ');
+  var splitHexString = hexStringTrim.split(' ');
   
   var byteBuffer = new ArrayBuffer(splitHexString.length);
   //can not edit the ArrayBuffer, need to go through this method

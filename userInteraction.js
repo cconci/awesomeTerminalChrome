@@ -133,7 +133,6 @@ document.querySelector('#buttonConnectToPort').onclick = function() {
   connect_to_port();
 };
 
-
 document.querySelector('#UIOptions').onclick = function() {
     
   if(document.querySelector('#divUIOptions').style.display === "") {
@@ -146,6 +145,9 @@ document.querySelector('#UIOptions').onclick = function() {
     
 };
 
+/*
+RX Option Selections
+*/
 
 document.querySelector('#rxFormateOptionAfterByte').onchange = function() {
   
@@ -179,15 +181,59 @@ document.querySelector('#rxFormateOptionAfterBytes').onchange = function() {
 
 };
 
-
-document.querySelector('#DateTimeStampList').onchange = function() {
+document.querySelector('#rxDateTimeStampList').onchange = function() {
   
+  //show example row identifier info
   document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
   document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
-  document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = getRXRowIdentifier();
+  document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = getRowIdentifierText(0,false);
   
 };
 
+/*
+TX Option Selections
+*/
+
+document.querySelector('#txInputEveryXms').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#txInputEveryXmsRB').checked = true;
+  document.querySelector('#txFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#txInputXtimes').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#txInputXtimesRB').checked = true;
+  document.querySelector('#txFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#txInputXbyteRX').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#txInputXbyteRXRB').checked = true;
+  document.querySelector('#txFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#txInputXbytesRX').onchange = function() {
+  
+  //Set the Radio Button as selected
+  document.querySelector('#txInputXbytesRXRB').checked = true;
+  document.querySelector('#txFormateOptionSelected').checked = true;
+
+};
+
+document.querySelector('#txDateTimeStampList').onchange = function() {
+  
+  //show example row identifier info
+  document.querySelector('#txFormateOptionExampleTimeStamp').style.display = "";
+  document.querySelector('#txFormateOptionExampleTimeStamp').style.color = "blue";
+  document.querySelector('#txFormateOptionExampleTimeStamp').innerHTML = getRowIdentifierText(1,false);
+  
+};
 
 document.querySelector('#buttonTXCopyToCB').onclick = function() {
   

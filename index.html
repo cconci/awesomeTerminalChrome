@@ -136,8 +136,17 @@
         <input class = "rxOption"             id ="txInputXbytesRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
         <input class = "rxOptionRadioButtons" id ="txInputXbytesRXRB" name="txInoutOptionsSelect" type="radio" >
       </p>
-      
-      Use TX options:<input class = "rxOption" type="checkbox" id="txInputOptionSelected" name="txInputOptionSelected" value="x">
+       <p> * Append date time stamp:
+        <select class = "rxOption" id="txDateTimeStampList">
+          <option value="None">None</option>
+          <option value="Local">Local</option>
+          <option value="Epoch">Epoch(ms)</option>
+          <option value="Custom 1">Custom 1</option>
+        </select> 
+        <span class = "rxOptionRadioButtons" style="display: none;" id="txFormateOptionExampleTimeStamp"></span>
+        
+      </p>
+      Use TX options:<input class = "rxOption" type="checkbox" id="txFormateOptionSelected" name="txInputOptionSelected" value="x">
     <hr>
   </div>
   
@@ -179,7 +188,7 @@
         <input class = "rxOptionRadioButtons" id ="rxFormateOptionAfterBytesRB" type="radio" name="rxOptionsSelect" value="axs">
       </p>
       <p> * Append date time stamp:
-        <select class = "rxOption" id="DateTimeStampList">
+        <select class = "rxOption" id="rxDateTimeStampList">
           <option value="None">None</option>
           <option value="Local">Local</option>
           <option value="Epoch">Epoch(ms)</option>
