@@ -50,7 +50,7 @@ document.querySelector('#buttonRXClear').onclick = function() {
 document.querySelector('#buttonRefreshPorts').onclick = function() {
     
   //
-  update_ports();
+  updatePorts();
 };
 
 document.querySelector('#baudRatesList').onchange = function() {
@@ -130,7 +130,7 @@ document.querySelector('#buttonFontN').onclick = function() {
 document.querySelector('#buttonConnectToPort').onclick = function() {
     
   //
-  connect_to_port();
+  connectToPort();
 };
 
 document.querySelector('#UIOptions').onclick = function() {

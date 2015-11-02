@@ -22,13 +22,13 @@ var txAutomateCount = 0;
 
 
 /*
-List all ports into drop down box on main page
+List all ports into drop down box on main page 
 */
 window.onload = function() {
   
-  chrome.app.window.onBoundsChanged.addListener(window_bounds_changed);
+  chrome.app.window.onBoundsChanged.addListener(windowBoundsChanged);
   
-  update_ports();
+  updatePorts();
 
   //Show the version on the header
   document.querySelector('#pageTitle').innerHTML = "Awesome Terminal Chrome V"+chrome.runtime.getManifest().version;
@@ -37,7 +37,7 @@ window.onload = function() {
   
   
   //add the recive listener
-  chrome.serial.onReceive.addListener(read_data_callback);
+  chrome.serial.onReceive.addListener(readDataCallback);
   
   updateStatsCounters();
   
@@ -47,11 +47,11 @@ window.onload = function() {
   
 };
 
-function window_bounds_changed() {
+function windowBoundsChanged() {
   console.log("Windows bounds have changed");
 }
 
-function update_ports() { 
+function updatePorts() { 
   /*
     var serial = new Serial('test1');
     
@@ -93,15 +93,12 @@ function update_ports() {
 }
 
 
-function connect_to_port() {
+function connectToPort() {
   
   console.log("Connecting to port");
   
-  //Check if we are connected first
-  //if(connectionId != -1) { 
-    disconnect_from_port();
-  //}
-  
+  disconnectFromPort();
+
   /*
   def of all the params,
     https://developer.chrome.com/apps/serial
@@ -124,55 +121,60 @@ function connect_to_port() {
   
   console.log("Port Options:"+port +"@"+baudRate);
   
-  /*
-  This try catch does not catch the permisson(I think its permissons on linux) issue I have been seeing
-   -it goes away once you add yourself to the correct group, ref the Notes.txt
-  */
+  //dataBits , parityBit , stopBits
+  chrome.serial.connect(port, {bitrate: baudRate,dataBits:dataBitsVal,parityBit:parityBitVal,stopBits:stopBitsVal}, serialConnectCallback);
+
+}
+
+function serialConnectCallback(info) {
+  
   try {
     
-    //dataBits , parityBit , stopBits
-    chrome.serial.connect(port, {bitrate: baudRate,dataBits:dataBitsVal,parityBit:parityBitVal,stopBits:stopBitsVal}, function(info) {
-      
-                  try {
-                    connectionId = info.connectionId;
-                  
-                    console.log('Connected on port '+port+', with id ' + connectionId + 'and Bitrate ' + info.bitrate);
-                  
-                    document.querySelector('#portInfo').style.color = "green";
-                    document.querySelector('#portInfo').innerHTML = "Connection open ("+port+")";
-                    
-                  } catch (e) {
-                    console.log("Connect ERROR - check serial permisons on host");
-                    
-                    document.querySelector('#portInfo').style.color = "red";
-                    document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
-                    
-                  }
-              });
-  } catch(e) {
-    //Drama. possibly the permissons
-    //console.log(e);
+    var port = document.querySelector('#portList').value;
+    
+    connectionId = info.connectionId;
+  
+    console.log('Connected on port '+port+', with id ' + connectionId + 'and Bitrate ' + info.bitrate);
+  
+    document.querySelector('#portInfo').style.color = "green";
+    document.querySelector('#portInfo').innerHTML = "Connection open ("+port+")";
+    
+    //period update
+    setTimeout(openConnectionPeriodChecks,1000);
+    
+  } catch (e) {
     console.log("Connect ERROR - check serial permisons on host");
     
     document.querySelector('#portInfo').style.color = "red";
     document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
     
+  }  
+}
+
+function openConnectionPeriodChecks() {
+  
+  console.log('openConnectionPeriodChecks()');
+  
+  getControlLinesStatus();
+  
+}
+
+function disconnectFromPort() {
+  chrome.serial.disconnect(connectionId, serialDisconnectCallback);
+}
+
+function serialDisconnectCallback(result) {
+  
+  if(result === true) {
+    console.log('serialDisconnectCallback() : Connection with id: ' + connectionId + ' is now closed');
+  } else {
+    console.log('serialDisconnectCallback() : Connection with id: ' + connectionId + ' did not close');
   }
   
 }
 
-function disconnect_from_port() {
-  
-  chrome.serial.disconnect(connectionId, function(result) {
-                
-                console.log('Connection with id: ' + connectionId + ' is now closed');
-            });
-            
-  //connectionId = -1;//set to invalid
-}
-
-function read_data_callback(info) {
-  console.log("read_data_callback():stuff");
+function readDataCallback(info) {
+  console.log("readDataCallback():enter");
   console.log(info);
   console.log(String.fromCharCode.apply(null, new Uint8Array(info.data)));
   var uint8View = new Uint8Array(info.data);
@@ -188,24 +190,74 @@ function read_data_callback(info) {
   updateStatsCounters();
 }
 
-function send_data(byteBuffer) {
+function sendData(byteBuffer) {
   
   var uint8View = new Uint8Array(byteBuffer);
   
   //stats
   txByteCount += uint8View.length;
   
+  chrome.serial.send(connectionId, byteBuffer, serialSendCallBack);
+
+  updateStatsCounters();
+}
+
+function serialSendCallBack(sendInfo) {
+  
   try {
-    chrome.serial.send(connectionId, byteBuffer, function() {console.log('Write');});
+    console.log('serialSendCallBack() : Write');
+    console.log('serialSendCallBack() : Bytes Sent:'+sendInfo.bytesSent);
+    console.log('serialSendCallBack() : Error Stats:'+sendInfo.error);
   } catch(e) {
     //Error
-    console.log("send_data() - ERROR");
+    console.log("sendData() - ERROR");
     document.querySelector('#portInfo').style.color = "red";
     document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
   }
-  
-  updateStatsCounters();
 }
+
+function getControlLinesStatus() {
+  
+  try {
+    chrome.serial.getControlSignals(connectionId, serialGetControlSignalsCallBack);
+    
+    return true;
+    
+  } catch(e) {
+    console.log("getControlLinesStatus() - ERROR");
+    document.querySelector('#portInfo').style.color = "red";
+    document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";    
+  }
+  
+  return false;
+  
+}
+
+function serialGetControlSignalsCallBack(signals) {
+  
+  try {
+    console.log("serialGetControlSignalsCallBack() - Enter");
+  
+    console.log("serialGetControlSignalsCallBack() - DCD:"+signals.dcd);
+    console.log("serialGetControlSignalsCallBack() - CTS:"+signals.cts);
+    console.log("serialGetControlSignalsCallBack() - RI:"+signals.ri);
+    console.log("serialGetControlSignalsCallBack() - DSR:"+signals.dsr);
+    
+    //still ok check again...soon
+    setTimeout(openConnectionPeriodChecks,5000);
+    
+  } catch(e) {
+    console.log("serialGetControlSignalsCallBack() - ERROR");
+    document.querySelector('#portInfo').style.color = "red";
+    document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";        
+  }
+  
+  
+}
+
+//
+//End of Serial layer
+//
 
 function updateStatsCounters()  {
   
@@ -531,7 +583,7 @@ function txUserInput() {
       }
     }
     
-    send_data(byteBuffer);
+    sendData(byteBuffer);
     
     //row Identifier
     document.querySelector('#termTX').value += getRowIdentifierText(1,true);
