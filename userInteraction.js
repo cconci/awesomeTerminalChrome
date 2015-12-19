@@ -190,6 +190,12 @@ document.querySelector('#rxDateTimeStampList').onchange = function() {
   
 };
 
+document.querySelector('#rxOutputFormatList').onchange = function() {
+  
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+  
+};
+
 /*
 TX Option Selections
 */

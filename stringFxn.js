@@ -22,8 +22,149 @@ function padStringLeft(stringToPad,NumberToPadFor,stringToPadWith) {
   
 }
 
-function arrayAlementToString(arrayElement) {
+function arrayAlementToBinaryString(arrayElement) {
+  return padStringLeft(arrayElement.toString(2),8,"0")+" ";
+}
+
+
+function arrayAlementToHexString(arrayElement) {
   return padStringLeft(arrayElement.toString(16),2,"0")+" ";
+}
+
+function arrayAlementToOctalString(arrayElement) {
+  return padStringLeft(arrayElement.toString(8),3,"0")+" ";
+}
+
+function arrayAlementToAsciiString(arrayElement,showSpecialChars) {
+  //no padding or spacing on Ascii strings
+
+  var specialCharsDetailed = [
+    "Null char",
+    "Start of Heading",
+    "Start of Text",
+    "End of Text",
+    "End of Transmission",
+    "Enquiry",
+    "Acknowledgment",
+    "Bell",
+    "Back Space",
+    "Horizontal Tab",
+    "Line Feed",
+    "Vertical Tab",
+    "Form Feed",
+    "Carriage Return",
+    "Shift Out / X-On",
+    "Shift In / X-Off",
+    "Data Line Escape",
+    "Device Control 1 (oft. XON)",
+    "Device Control 2",
+    "Device Control 3 (oft. XOFF)",
+    "Device Control 4",
+    "Negative Acknowledgement",
+    "Synchronous Idle",
+    "End of Transmit Block",
+    "Cancel",
+    "End of Medium",
+    "Substitute",
+    "Escape",
+    "File Separator",
+    "Group Separator",
+    "Record Separator",
+    "Unit Separator",
+  ];
+  
+
+  var specialCharsSimple = [
+    "NUL",
+    "SOH",
+    "STX",
+    "ETX",
+    "EOT",
+    "ENQ",
+    "ACK",
+    "BEL",
+    "BS",
+    "HT",
+    "LF",
+    "VT",
+    "FF",
+    "CR",
+    "SO",
+    "SI",
+    "DLE",
+    "DC1",
+    "DC2",
+    "DC3",
+    "DC4",
+    "NAK",
+    "SYN",
+    "ETB",
+    "CAN",
+    "EM",
+    "SUB",
+    "ESC",
+    "FS",
+    "GS",
+    "RS",
+    "US",
+  ];
+  
+    
+    
+    
+    
+    
+    
+    
+    var specialCharsCode = [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "\\a",
+    "\\b",
+    "\\t",
+    "\\n",
+    "\\v",
+    "\\f",
+    "\\r",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ];
+
+
+  if(showSpecialChars === 1 && arrayElement <= 31) {
+    
+    return specialCharsSimple[arrayElement];
+    
+  }
+  else if (showSpecialChars === 2 && arrayElement <= 31){
+    return specialCharsDetailed[arrayElement];
+  }
+  else if (showSpecialChars === 3 && arrayElement <= 31){
+    return specialCharsCode[arrayElement];
+  }
+  
+  return padStringLeft(String.fromCharCode(arrayElement.toString()),0,"0")+"";
 }
 
 function arrayAlementsToString(arrayData) {

@@ -7,3 +7,10 @@ long story short, on linux do this
 sudo adduser USERNAME dialout
 
 where USERNAME is your username :)
+
+different commands on Fedora 23,
+
+as root,
+
+id -Gn <username>
+usermod -a -G dialout <username>

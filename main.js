@@ -279,7 +279,7 @@ function updateRXoutput(uint8View) {
     
     for(i=0;i<uint8View.length;i++) { 
     
-      var nByte = arrayAlementToString(uint8View[i]);
+      var nByte = getByteInUserSelectedFormat(uint8View[i]); 
       
       if(document.querySelector('#rxFormateOptionAfterByteRB').checked === true) {
       
@@ -381,7 +381,7 @@ function updateRXoutput(uint8View) {
       }
       else {
         //normal
-        document.querySelector('#termRX').value += arrayAlementsToString(uint8View);
+        document.querySelector('#termRX').value += nByte;
       }
     }
     
@@ -395,6 +395,42 @@ function updateRXoutput(uint8View) {
   //auto scroll
   var ta = document.getElementById('termRX');
   ta.scrollTop = ta.scrollHeight;
+  
+}
+
+function getByteInUserSelectedFormat(rxByte){
+  
+  var selection = document.querySelector('#rxOutputFormatList').value;
+  
+  var retVar = "";
+  
+  switch(selection){
+    
+    case "ASCII_0":
+      retVar = arrayAlementToAsciiString(rxByte,0);
+      break;
+    case "ASCII_1":
+      retVar = arrayAlementToAsciiString(rxByte,1);
+      break;
+    case "ASCII_2":
+      retVar = arrayAlementToAsciiString(rxByte,2);
+      break;
+    case "ASCII_3":
+      retVar = arrayAlementToAsciiString(rxByte,3);
+      break;
+    case "Hex":
+      retVar = arrayAlementToHexString(rxByte);
+      break;
+    case "Octal":
+      retVar = arrayAlementToOctalString(rxByte);
+      break;
+    case "Binary":
+      retVar = arrayAlementToBinaryString(rxByte);
+      break;
+    
+  }
+  
+  return retVar;
   
 }
 
