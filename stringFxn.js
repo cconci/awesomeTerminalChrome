@@ -22,20 +22,20 @@ function padStringLeft(stringToPad,NumberToPadFor,stringToPadWith) {
   
 }
 
-function arrayAlementToBinaryString(arrayElement) {
+function arrayElementToBinaryString(arrayElement) {
   return padStringLeft(arrayElement.toString(2),8,"0")+" ";
 }
 
 
-function arrayAlementToHexString(arrayElement) {
+function arrayElementToHexString(arrayElement) {
   return padStringLeft(arrayElement.toString(16),2,"0")+" ";
 }
 
-function arrayAlementToOctalString(arrayElement) {
+function arrayElementToOctalString(arrayElement) {
   return padStringLeft(arrayElement.toString(8),3,"0")+" ";
 }
 
-function arrayAlementToAsciiString(arrayElement,showSpecialChars) {
+function arrayElementToAsciiString(arrayElement,showSpecialChars) {
   //no padding or spacing on Ascii strings
 
   var specialCharsDetailed = [
@@ -167,7 +167,7 @@ function arrayAlementToAsciiString(arrayElement,showSpecialChars) {
   return padStringLeft(String.fromCharCode(arrayElement.toString()),0,"0")+"";
 }
 
-function arrayAlementsToString(arrayData) {
+function arrayElementsToString(arrayData) {
   
   var output = "";
   

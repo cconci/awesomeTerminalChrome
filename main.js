@@ -32,12 +32,14 @@ window.onload = function() {
 
   //Show the version on the header
   document.querySelector('#pageTitle').innerHTML = "Awesome Terminal Chrome V"+chrome.runtime.getManifest().version;
+  document.querySelector('#heading').innerHTML = "Awesome Terminal V"+chrome.runtime.getManifest().version;
 
   console.log("window.onload "+Date()+"");
   
   
   //add the recive listener
   chrome.serial.onReceive.addListener(readDataCallback);
+  chrome.serial.onReceiveError.addListener(readDataErrorCallback);
   
   updateStatsCounters();
   
@@ -188,6 +190,83 @@ function readDataCallback(info) {
   
   //update stats on ui
   updateStatsCounters();
+}
+
+function readDataErrorCallback(info){ 
+  
+  /*
+  Info From 
+    https://developer.chrome.com/apps/serial#event-onReceive
+  disconnected
+    The connection was disconnected.
+  timeout
+    No data has been received for receiveTimeout milliseconds.
+  device_lost
+    The device was most likely disconnected from the host.
+  break
+    The device detected a break condition.
+  frame_error
+    The device detected a framing error.
+  overrun
+    A character-buffer overrun has occurred. The next character is lost.
+  buffer_overflow
+    An input buffer overflow has occurred. There is either no room in the input buffer, or a character was received after the end-of-file (EOF) character.
+  parity_error
+    The device detected a parity error.
+  system_error
+    A system error occurred and the connection may be unrecoverable.
+  */
+  
+  var errorDetails = "--";
+  
+  switch(info.error){
+    
+    case "disconnected":
+      errorDetails = "disconnected";
+      break;
+    case "timeout":
+      errorDetails = "timeout";
+      break;
+    case "device_lost":
+      errorDetails = "device_lost";
+      break;
+    case "break":
+      errorDetails = "break";
+      break;
+    case "frame_error":
+      errorDetails = "frame_error";
+      break;
+    case "overrun":
+      errorDetails = "overrun";
+      break;
+    case "buffer_overflow":
+      errorDetails = "buffer_overflow";
+      break;
+    case "parity_error":
+      errorDetails = "parity_error";
+      break;
+    case "system_error":
+      errorDetails = "system_error";
+      break;
+    default:
+      errorDetails = "Unknown_error";
+      break;
+
+  }
+  
+  console.log('readDataErrorCallback():Error:'+errorDetails+'|'+info.error);
+  
+  document.querySelector('#termRX').value += "\n"+'[RX ERROR:'+errorDetails+']'+"\n";
+ 
+  autoScrollRxWindow();
+ 
+  //Connection is paused when called
+  chrome.serial.setPaused(connectionId, false, serialSetPausedCallback);
+  
+}
+
+function serialSetPausedCallback() { 
+  console.log('serialSetPausedCallback()');
 }
 
 function sendData(byteBuffer) {
@@ -389,8 +468,13 @@ function updateRXoutput(uint8View) {
   else {
   
     //just add to the output window
-    document.querySelector('#termRX').value += arrayAlementsToString(uint8View);
+    document.querySelector('#termRX').value += arrayElementsToString(uint8View);
   }
+  
+  autoScrollRxWindow();
+}
+
+function autoScrollRxWindow() {
   
   //auto scroll
   var ta = document.getElementById('termRX');
@@ -407,25 +491,25 @@ function getByteInUserSelectedFormat(rxByte){
   switch(selection){
     
     case "ASCII_0":
-      retVar = arrayAlementToAsciiString(rxByte,0);
+      retVar = arrayElementToAsciiString(rxByte,0);
       break;
     case "ASCII_1":
-      retVar = arrayAlementToAsciiString(rxByte,1);
+      retVar = arrayElementToAsciiString(rxByte,1);
       break;
     case "ASCII_2":
-      retVar = arrayAlementToAsciiString(rxByte,2);
+      retVar = arrayElementToAsciiString(rxByte,2);
       break;
     case "ASCII_3":
-      retVar = arrayAlementToAsciiString(rxByte,3);
+      retVar = arrayElementToAsciiString(rxByte,3);
       break;
     case "Hex":
-      retVar = arrayAlementToHexString(rxByte);
+      retVar = arrayElementToHexString(rxByte);
       break;
     case "Octal":
-      retVar = arrayAlementToOctalString(rxByte);
+      retVar = arrayElementToOctalString(rxByte);
       break;
     case "Binary":
-      retVar = arrayAlementToBinaryString(rxByte);
+      retVar = arrayElementToBinaryString(rxByte);
       break;
     
   }
@@ -624,7 +708,7 @@ function txUserInput() {
     //row Identifier
     document.querySelector('#termTX').value += getRowIdentifierText(1,true);
     //Sent Data
-    document.querySelector('#termTX').value += (arrayAlementsToString(new Uint8Array(byteBuffer)) +"\n");
+    document.querySelector('#termTX').value += (arrayElementsToString(new Uint8Array(byteBuffer)) +"\n");
     
     //auto scroll
     var ta = document.getElementById('termTX');
