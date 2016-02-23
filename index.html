@@ -87,7 +87,7 @@
     <!--<button id="buttonUserInputHide" type="button" >hide</button> -->
   </p>    
   <p>
-    <textarea title="Enter data as hex byte separated by a single space,
+    <textarea title="Enter data as a hex byte separated by a single space,
     e.g. AB 01 00 FF" id ="termInput" rows="1" cols="80" spellcheck="false" ></textarea>
   </p>
   
@@ -141,6 +141,7 @@
           <option value="None">None</option>
           <option value="Local">Local</option>
           <option value="Epoch">Epoch(ms)</option>
+          <option value="Time Since Last Packet">Time Since Last Packet(ms)</option>
           <option value="Custom 1">Custom 1</option>
         </select> 
         <span class = "rxOptionRadioButtons" style="display: none;" id="txFormateOptionExampleTimeStamp"></span>
@@ -204,6 +205,7 @@
           <option value="None">None</option>
           <option value="Local">Local</option>
           <option value="Epoch">Epoch(ms)</option>
+          <option value="Time Since Last Packet">Time Since Last Packet(ms)</option>
           <option value="Custom 1">Custom 1</option>
         </select> 
         <span class = "rxOptionRadioButtons" style="display: none;" id="rxFormateOptionExampleTimeStamp"></span>
@@ -226,6 +228,11 @@
   
   
 <ol id="demo"></ol>
+
+<footer>
+  <hr>
+  <h4 id="footer">Awesome Terminal</h4>
+</footer>
 
 </body>
 

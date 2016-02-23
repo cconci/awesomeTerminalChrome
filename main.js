@@ -19,6 +19,7 @@ var txAutomateActive = false;
 var txAutomateCurrentRow = 0;
 var txAutomateEnd = false;
 var txAutomateCount = 0;
+var periodicUpdateStarted = false;
 
 
 /*
@@ -142,13 +143,22 @@ function serialConnectCallback(info) {
     document.querySelector('#portInfo').innerHTML = "Connection open ("+port+")";
     
     //period update
-    setTimeout(openConnectionPeriodChecks,1000);
+    if(periodicUpdateStarted !== true) {
+      //else it is already running
+      periodicUpdateStarted = true;
+      setTimeout(openConnectionPeriodChecks,1000);
+    }
+    
+    //set footer info
+    document.querySelector('#footer').innerHTML = "Connected on: "+port+" @ "+info.bitrate;
     
   } catch (e) {
     console.log("Connect ERROR - check serial permisons on host");
     
     document.querySelector('#portInfo').style.color = "red";
     document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";
+    
+    document.querySelector('#footer').innerHTML = "NOT Connected";
     
   }  
 }
@@ -159,6 +169,12 @@ function openConnectionPeriodChecks() {
   
   getControlLinesStatus();
   
+  
+  //check again...soon
+  if(periodicUpdateStarted === true) {
+    
+    setTimeout(openConnectionPeriodChecks,5000);
+  }
 }
 
 function disconnectFromPort() {
@@ -321,9 +337,6 @@ function serialGetControlSignalsCallBack(signals) {
     console.log("serialGetControlSignalsCallBack() - CTS:"+signals.cts);
     console.log("serialGetControlSignalsCallBack() - RI:"+signals.ri);
     console.log("serialGetControlSignalsCallBack() - DSR:"+signals.dsr);
-    
-    //still ok check again...soon
-    setTimeout(openConnectionPeriodChecks,5000);
     
   } catch(e) {
     console.log("serialGetControlSignalsCallBack() - ERROR");
@@ -555,6 +568,16 @@ function getRowIdentifierText(txOrRxWindow,printSpacer) {
         +""+ padStringLeft( date.getHours()       +"" ,2,"0") 
         +""+ padStringLeft( date.getMinutes()     +"" ,2,"0")
         +""+ padStringLeft( date.getSeconds()     +"" ,2,"0");
+      break;
+    case "Time Since Last Packet":
+      
+      if(txOrRxWindow === 0) {
+        //RX
+      }
+      else {
+        //TX
+      }
+      
       break;
      
   }
