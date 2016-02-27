@@ -7,7 +7,7 @@ cconci
 function padStringLeft(stringToPad,NumberToPadFor,stringToPadWith) {
 
   /*
-  js has not string padding fxn?????
+  js has not got a string padding fxn?????
   */
 
   console.log(stringToPad.length +'\n');

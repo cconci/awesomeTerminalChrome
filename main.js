@@ -21,7 +21,6 @@ var txAutomateEnd = false;
 var txAutomateCount = 0;
 var periodicUpdateStarted = false;
 
-
 /*
 List all ports into drop down box on main page 
 */
@@ -192,20 +191,26 @@ function serialDisconnectCallback(result) {
 }
 
 function readDataCallback(info) {
-  console.log("readDataCallback():enter");
-  console.log(info);
-  console.log(String.fromCharCode.apply(null, new Uint8Array(info.data)));
-  var uint8View = new Uint8Array(info.data);
-  console.log(uint8View);
   
-  //stats
-  rxByteCount += uint8View.length;
+  if(info.connectionId == connectionId){
   
-  //append the data to the RX Window
-  updateRXoutput(uint8View);
-  
-  //update stats on ui
-  updateStatsCounters();
+    console.log("readDataCallback():enter");
+    console.log(info);
+    console.log(String.fromCharCode.apply(null, new Uint8Array(info.data)));
+    var uint8View = new Uint8Array(info.data);
+    console.log(uint8View);
+    
+    //stats
+    rxByteCount += uint8View.length;
+    
+    //append the data to the RX Window
+    updateRXoutput(uint8View);
+    
+    //update stats on ui
+    updateStatsCounters();
+  } else {
+    console.log("readDataCallback():Not our data");
+  }
 }
 
 function readDataErrorCallback(info){ 

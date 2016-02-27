@@ -285,3 +285,17 @@ document.querySelector('#buttonRestoreView').onclick = function() {
   document.querySelector('#termRX').style.margin.right = "auto";
   
 };
+
+document.querySelector('#newInstance').onclick = function() {
+  
+  var windowInstanceUniqueID = (new Date().getTime());
+  
+  chrome.app.window.create(
+  'index.html',
+  {
+    id: 'mainWindow_'+windowInstanceUniqueID+"",
+    bounds: {width: 680, height: 800}
+  }
+  ); 
+  
+};

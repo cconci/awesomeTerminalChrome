@@ -34,6 +34,11 @@ button:hover {
   
 }
 
+.optionTimeExample {
+  position: absolute;
+  left: 600px;  
+}
+
 /*Right align text*/
 .statsCounter{
   /*background-color: green;*/
