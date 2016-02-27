@@ -21,6 +21,9 @@ var txAutomateEnd = false;
 var txAutomateCount = 0;
 var periodicUpdateStarted = false;
 
+//setTimeout is bad, very very bad
+var automateSetTimeoutIDs = [];
+
 /*
 List all ports into drop down box on main page 
 */
@@ -600,8 +603,15 @@ function getRowIdentifierText(txOrRxWindow,printSpacer) {
 function txUserInputInit(callType) {
   
   if(callType === 1 && txAutomateEnd === true) {
-    //we have stopped te uatomte calls
+    //we have stopped the automate calls
     txAutomateEnd = false;
+    txAutomateActive = false;
+    
+    //kill any setTimeout calls
+    clearAutomateSetTimeoutCalls();
+    
+    console.log("txUserInputInit() - STOP from timeout");
+    
     return;
   }
   else if(callType === 0 && txAutomateActive === true) {
@@ -612,6 +622,9 @@ function txUserInputInit(callType) {
     txAutomateEnd = true;
     txAutomateCount = 0;
     //we are stopping the current TX operation
+    
+    console.log("txUserInputInit() - STOP from user");
+    
     return;
     
   }
@@ -624,8 +637,24 @@ function txUserInputInit(callType) {
   
 }
 
+function clearAutomateSetTimeoutCalls(){
+  
+  /*
+  it is a Good idea to keep track of the setTimeout calls,
+  http://stackoverflow.com/questions/3847121/how-can-i-disable-all-settimeout-events
+  */
+  
+  for (var i = 0; i < automateSetTimeoutIDs.length; i++) {
+    clearTimeout(automateSetTimeoutIDs[i]);
+  }
+  
+  //clear array
+  automateSetTimeoutIDs = [];
+}
 
 function txUserInput() { 
+  
+  var setTimeoutID;
   
   //add text in the user input as a row in the output
   if( (document.querySelector('#termInput').value).length > 0) {
@@ -678,10 +707,12 @@ function txUserInput() {
         
         txAutomateCurrentRow++;//next row
         
-        //callback woth param
-        setTimeout(
+        //callback with param
+        setTimeoutID = setTimeout(
           function() {txUserInputInit(1);}, 
           nextTxTimeMS);
+          
+        automateSetTimeoutIDs.push(setTimeoutID);
         
       }
       
@@ -702,9 +733,11 @@ function txUserInput() {
           txAutomateActive = true;
           
           //start count down till next tx
-          setTimeout(
+          setTimeoutID = setTimeout(
             function() { txUserInputInit(1);}, 
             document.querySelector('#txInputEveryXms').value);
+            
+          automateSetTimeoutIDs.push(setTimeoutID);
         }
         else if(document.querySelector('#txInputXtimesRB').checked === true) {
         
@@ -714,9 +747,11 @@ function txUserInput() {
             txAutomateActive = true;
           
             //start count down till next tx
-            setTimeout(
+            setTimeoutID = setTimeout(
               function() { txUserInputInit(1);}, 
               document.querySelector('#txInputEveryXms').value);
+            
+            automateSetTimeoutIDs.push(setTimeoutID);
             
             txAutomateCount++;
           
