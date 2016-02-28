@@ -24,6 +24,10 @@ var periodicUpdateStarted = false;
 //setTimeout is bad, very very bad
 var automateSetTimeoutIDs = [];
 
+//time since last packet stamp
+var txLastTimeStamp = 0;
+var rxLastTimeStamp = 0;
+
 /*
 List all ports into drop down box on main page 
 */
@@ -115,6 +119,7 @@ function connectToPort() {
   var dataBitsVal = document.querySelector('#DataBitsList').value;
   var parityBitVal = document.querySelector('#ParityBitList').value;
   var stopBitsVal = document.querySelector('#StopBitsList').value;
+  var flowControl = ((document.querySelector('#ctsFlowControlList').value) === "true")?true:false;
   
   if(document.querySelector('#baudRatesList').value == "Other") {
     baudRate = parseInt(document.querySelector('#customBaudRate').value);
@@ -127,7 +132,15 @@ function connectToPort() {
   console.log("Port Options:"+port +"@"+baudRate);
   
   //dataBits , parityBit , stopBits
-  chrome.serial.connect(port, {bitrate: baudRate,dataBits:dataBitsVal,parityBit:parityBitVal,stopBits:stopBitsVal}, serialConnectCallback);
+  chrome.serial.connect(port, 
+    {
+      bitrate:baudRate,
+      dataBits:dataBitsVal,
+      parityBit:parityBitVal,
+      stopBits:stopBitsVal,
+      ctsFlowControl:flowControl
+      
+    }, serialConnectCallback);
 
 }
 
@@ -152,7 +165,7 @@ function serialConnectCallback(info) {
     }
     
     //set footer info
-    document.querySelector('#footer').innerHTML = "Connected on: "+port+" @ "+info.bitrate;
+    document.querySelector('#footer').innerHTML = "Connected on: "+port+" @ "+info.bitrate+","+info.dataBits+","+info.parityBit+","+info.stopBits+","+info.ctsFlowControl;
     
   } catch (e) {
     console.log("Connect ERROR - check serial permisons on host");
@@ -581,9 +594,13 @@ function getRowIdentifierText(txOrRxWindow,printSpacer) {
       
       if(txOrRxWindow === 0) {
         //RX
+        output = padStringLeft((new Date().getTime()) - rxLastTimeStamp+"",8,"0");
+        rxLastTimeStamp = (new Date().getTime()); //update last rx time
       }
       else {
         //TX
+        output = padStringLeft((new Date().getTime()) - txLastTimeStamp+"",8,"0");
+        txLastTimeStamp = (new Date().getTime());//update last tx time
       }
       
       break;
@@ -644,6 +661,8 @@ function clearAutomateSetTimeoutCalls(){
   http://stackoverflow.com/questions/3847121/how-can-i-disable-all-settimeout-events
   */
   
+  console.log("clearAutomateSetTimeoutCalls() - Array Length:"+automateSetTimeoutIDs.length);
+  
   for (var i = 0; i < automateSetTimeoutIDs.length; i++) {
     clearTimeout(automateSetTimeoutIDs[i]);
   }
@@ -655,6 +674,9 @@ function clearAutomateSetTimeoutCalls(){
 function txUserInput() { 
   
   var setTimeoutID;
+  
+  //Kill any setTimout calls from automate, otherwise there will be a list of expired setTimeout IDs
+  clearAutomateSetTimeoutCalls();
   
   //add text in the user input as a row in the output
   if( (document.querySelector('#termInput').value).length > 0) {

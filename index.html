@@ -60,6 +60,13 @@
       <option value="two">two</option>
       </select>        
     </p>
+    <p>
+      RTS/CTS hardware flow control
+      <select id="ctsFlowControlList">
+      <option value="false">false</option>
+      <option value="true">true</option>
+      </select>        
+    </p>
     <hr>
   </div>
   <div id="divUIOptions" style="display: none;">
@@ -71,6 +78,9 @@
     </p>
     <p>
       <button id="buttonRestoreView"    type="button" >Restore View</button>
+    </p>
+    <p>
+      Window Nick Name: <input class = "" id ="windowNickName"  title="" type="text" maxlength="32" size="20" value=""spellcheck="true">
     </p>
     <hr>
   </div>
@@ -119,22 +129,22 @@
     
     <h3>TX user input,</h3>
       <p> - Every 'X' ms (DEC):              
-        <input class = "rxOption"             id ="txInputEveryXms"  title="this is 'X'" type="text" maxlength="6" size="4" value="1000">
+        <input class = "rxOption"             id ="txInputEveryXms"  title="this is 'X'" type="text" maxlength="6" size="4" value="">
         <input class = "rxOptionRadioButtons" id ="txInputEveryXmsRB" name="txInoutOptionsSelect" type="radio" >
       </p>    
       
       <p> - 'X' number of times (DEC):              
-        <input class = "rxOption"             id ="txInputXtimes"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
+        <input class = "rxOption"             id ="txInputXtimes"  title="this is 'X'" type="text" maxlength="6" size="4" value="">
         <input class = "rxOptionRadioButtons" id ="txInputXtimesRB" name="txInoutOptionsSelect" type="radio" >
       </p>  
       
       <p> - After Byte with value 'X' received (HEX):             
-        <input class = "rxOption"             id ="txInputXbyteRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
+        <input class = "rxOption"             id ="txInputXbyteRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="">
         <input class = "rxOptionRadioButtons" id ="txInputXbyteRXRB" name="txInoutOptionsSelect" type="radio" >
       </p>  
       
       <p> - After 'X' bytes received (DEC): 
-        <input class = "rxOption"             id ="txInputXbytesRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="10">
+        <input class = "rxOption"             id ="txInputXbytesRX"  title="this is 'X'" type="text" maxlength="6" size="4" value="">
         <input class = "rxOptionRadioButtons" id ="txInputXbytesRXRB" name="txInoutOptionsSelect" type="radio" >
       </p>
        <p> * Append date time stamp:

@@ -299,3 +299,12 @@ document.querySelector('#newInstance').onclick = function() {
   ); 
   
 };
+
+document.querySelector('#windowNickName').onchange = function() {
+
+  var nickName = document.querySelector('#windowNickName').value;
+
+  document.querySelector('#pageTitle').innerHTML = "Awesome Terminal Chrome V"+chrome.runtime.getManifest().version+" ["+nickName+"]";
+  document.querySelector('#heading').innerHTML = "Awesome Terminal V"+chrome.runtime.getManifest().version +" ["+nickName+"]";
+  
+};
