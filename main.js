@@ -548,7 +548,11 @@ function getByteInUserSelectedFormat(rxByte){
     
   }
   
-  return retVar;
+  //any extra formating
+  var appendTextBefore = document.querySelector('#rxAppendStringBefore').value;
+  var appendTextAfter = document.querySelector('#rxAppendStringAfter').value;
+  
+  return appendTextBefore + retVar + appendTextAfter;
   
 }
 

@@ -196,6 +196,18 @@ document.querySelector('#rxOutputFormatList').onchange = function() {
   
 };
 
+document.querySelector('#rxAppendStringBefore').onchange = function() {
+  
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+  
+};
+
+document.querySelector('#rxAppendStringAfter').onchange = function() {
+  
+  document.querySelector('#rxFormateOptionSelected').checked = true;
+  
+};
+
 /*
 TX Option Selections
 */
@@ -308,3 +320,42 @@ document.querySelector('#windowNickName').onchange = function() {
   document.querySelector('#heading').innerHTML = "Awesome Terminal V"+chrome.runtime.getManifest().version +" ["+nickName+"]";
   
 };
+/*
+UI Show/Hide
+*/
+// - 
+document.querySelector('#buttonUserInputHide').onclick = function() {
+    
+  if(document.querySelector('#divUserInputSection').style.display === "") {
+    document.querySelector('#divUserInputSection').style.display = "none";
+    document.querySelector('#divUserInputSectionHide').style.display = "";
+  }
+  else {
+    document.querySelector('#divUserInputSection').style.display = "";
+    document.querySelector('#divUserInputSectionHide').style.display = "none";
+  }  
+};
+
+// - 
+document.querySelector('#buttonTXHide').onclick = function() {
+    
+  if(document.querySelector('#divTXSection').style.display === "") {
+    document.querySelector('#divTXSection').style.display = "none";
+    document.querySelector('#divTXSectionHide').style.display = "";
+  }
+  else {
+    document.querySelector('#divTXSection').style.display = "";
+    document.querySelector('#divTXSectionHide').style.display = "none";
+  }  
+};
+// - 
+document.querySelector('#buttonRXHide').onclick = function() {
+    
+  if(document.querySelector('#divRXSection').style.display === "") {
+    document.querySelector('#divRXSection').style.display = "none";
+  }
+  else {
+    document.querySelector('#divRXSection').style.display = "";
+  }  
+};
+
