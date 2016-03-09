@@ -80,7 +80,19 @@
       <button id="buttonRestoreView"    type="button" >Restore View</button>
     </p>
     <p>
-      Window Nick Name: <input class = "" id ="windowNickName"  title="" type="text" maxlength="32" size="20" value=""spellcheck="true">
+      Window Nick Name:  <input class = "" id ="windowNickName"  title="" type="text" maxlength="32" size="20" value=""spellcheck="true">
+    </p>
+    <p>
+      Show Number Lines: <input class = "" type="checkbox" id="showNumberLines" name="showNumberLines" value="x">
+    </p>
+    <p> 
+      Number Line Start: <input class = "" id ="numberLineStartVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
+    </p>
+    <p> 
+      Number Line value padding: <input class = "" id ="numberLinePaddingVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
+    </p>
+    <p> 
+      Number Line start padding: <input class = "" id ="numberLineStartPaddingVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
     </p>
     <hr>
   </div>
@@ -173,6 +185,14 @@
     <p>
       <textarea id ="termTX" rows="4" cols="80" spellcheck="false" disabled></textarea>
     </p>
+    
+    <!--Number Line -->
+    <div id="termTXNumberLineHide" style="display: none;">
+      <p>
+        <textarea id ="termTXNumberLine" rows="1" cols="80" spellcheck="false" style="resize: none;overflow:hidden;" disabled></textarea>
+      </p>
+    </div>
+    
     <button id="buttonTXClear" type="button" >Clear TX</button>
     <button id="buttonTXCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   </div>
@@ -246,6 +266,14 @@
     <p>
       <textarea id ="termRX" rows="4" cols="80" spellcheck="false" disabled></textarea>
     </p>
+    
+    <!--Number Line -->
+    <div id="termRXNumberLineHide" style="display: none;">
+      <p>
+        <textarea id ="termRXNumberLine" rows="1" cols="80" spellcheck="false" style="resize: none;overflow:hidden;" disabled></textarea>
+      </p>
+    </div>
+    
     <button id="buttonRXClear" type="button" >Clear RX</button>
     <button id="buttonRXCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   </div>

@@ -53,6 +53,10 @@ window.onload = function() {
   document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
+  
+  initNumberLines();
   
 };
 
@@ -806,3 +810,36 @@ function txUserInput() {
   }  
   
 }
+
+function initNumberLines() {
+  
+  document.querySelector('#termRXNumberLine').value = ""; // clear
+  document.querySelector('#termTXNumberLine').value = ""; // clear
+  
+
+  var cols = parseInt(document.getElementById('termInput').cols);
+
+  var startVal = parseInt(document.querySelector('#numberLineStartVal').value);
+
+  var startPadding = parseInt(document.querySelector('#numberLineStartPaddingVal').value);
+  
+  var valuePadding = parseInt(document.querySelector('#numberLinePaddingVal').value);
+
+  for(i=0;i<startPadding;i++){
+    document.querySelector('#termRXNumberLine').value += " "; 
+    document.querySelector('#termTXNumberLine').value += " "; 
+  }
+
+  for(i=startVal;i<(startVal+cols);i++){
+    
+    var numberFormatted = padStringLeft(i+'',2,"0");
+    
+    var numberFormattedPadded = padStringLeft(numberFormatted+'',valuePadding,"0")+" ";
+    
+    document.querySelector('#termRXNumberLine').value += ""+numberFormattedPadded; 
+    document.querySelector('#termTXNumberLine').value += ""+numberFormattedPadded; 
+    
+  }
+  
+}
+

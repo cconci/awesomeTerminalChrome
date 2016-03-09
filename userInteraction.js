@@ -114,6 +114,8 @@ document.querySelector('#buttonFontP').onclick = function() {
   document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
    
 };
 
@@ -124,7 +126,8 @@ document.querySelector('#buttonFontN').onclick = function() {
   document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
-    
+  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
 };
 
 document.querySelector('#buttonConnectToPort').onclick = function() {
@@ -359,3 +362,34 @@ document.querySelector('#buttonRXHide').onclick = function() {
   }  
 };
 
+//
+document.querySelector('#showNumberLines').onclick = function() {
+    
+  if(document.querySelector('#termTXNumberLineHide').style.display === "") {
+    document.querySelector('#termTXNumberLineHide').style.display = "none";
+    document.querySelector('#termRXNumberLineHide').style.display = "none";
+  }
+  else {
+    document.querySelector('#termTXNumberLineHide').style.display = "";
+    document.querySelector('#termRXNumberLineHide').style.display = "";
+  }
+  
+};
+
+//
+document.querySelector('#numberLineStartVal').onchange = function() {
+
+  initNumberLines();
+  
+};
+
+document.querySelector('#numberLineStartPaddingVal').onchange = function() {
+
+  initNumberLines();
+  
+};
+document.querySelector('#numberLinePaddingVal').onchange = function() {
+
+  initNumberLines();
+  
+};
