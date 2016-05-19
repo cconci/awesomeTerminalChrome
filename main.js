@@ -46,7 +46,6 @@ window.onload = function() {
   
   //add the recive listener
   chrome.serial.onReceive.addListener(readDataCallback);
-  chrome.serial.onReceiveError.addListener(readDataErrorCallback);
   
   updateStatsCounters();
   
@@ -62,6 +61,16 @@ window.onload = function() {
 
 function windowBoundsChanged() {
   console.log("Windows bounds have changed");
+}
+
+function addOnReciveListener()
+{
+  chrome.serial.onReceiveError.addListener(readDataErrorCallback);
+}
+
+function removeOnReciveListener()
+{
+  chrome.serial.onReceiveError.removeListener(readDataErrorCallback);
 }
 
 function updatePorts() { 
@@ -285,6 +294,10 @@ function readDataErrorCallback(info){
       break;
     case "parity_error":
       errorDetails = "parity_error";
+      
+      //Connection is paused when called
+      chrome.serial.setPaused(connectionId, false, serialSetPausedCallback);
+      
       break;
     case "system_error":
       errorDetails = "system_error";
@@ -301,9 +314,6 @@ function readDataErrorCallback(info){
  
   autoScrollRxWindow();
  
-  //Connection is paused when called
-  chrome.serial.setPaused(connectionId, false, serialSetPausedCallback);
-  
 }
 
 function serialSetPausedCallback() { 
@@ -429,7 +439,7 @@ function updateRXoutput(uint8View) {
         //use to string to show the value in hex (that is the way it is entered on the UI)
         if(document.querySelector('#rxFormateOptionBeforeByte').value.toLowerCase() === uint8View[i].toString(16)) {
           
-          //Befire Byte, so we show the \n first
+          //Before Byte, so we show the \n first
         
           //show byte and put \n
           document.querySelector('#termRX').value += "\n";
@@ -682,6 +692,7 @@ function clearAutomateSetTimeoutCalls(){
 function txUserInput() { 
   
   var setTimeoutID;
+  var runAutomateCheck = false;
   
   //Kill any setTimout calls from automate, otherwise there will be a list of expired setTimeout IDs
   clearAutomateSetTimeoutCalls();
@@ -708,7 +719,7 @@ function txUserInput() {
         txAutomateActive = false;
         txAutomateCurrentRow = 0;
         
-        return;
+        runAutomateCheck = true;
       }
       else
       {
@@ -753,7 +764,11 @@ function txUserInput() {
       
       //normal
       byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
-      
+     
+      runAutomateCheck = true; 
+    }
+    
+    if(runAutomateCheck === true){
       //check if any of the repeat options are on,
       if(document.querySelector('#txFormateOptionSelected').checked === true) {
         

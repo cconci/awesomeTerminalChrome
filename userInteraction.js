@@ -393,3 +393,14 @@ document.querySelector('#numberLinePaddingVal').onchange = function() {
   initNumberLines();
   
 };
+
+document.querySelector('#handleRXErrors').onchange = function() {
+
+   if(document.querySelector('#handleRXErrors').checked === true) {
+    addOnReciveListener();
+  }
+  else {
+    removeOnReciveListener();
+  }
+
+};
