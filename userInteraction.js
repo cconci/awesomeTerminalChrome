@@ -106,6 +106,19 @@ document.querySelector('#buttonTXOptions').onclick = function() {
     
 };
 
+//
+document.querySelector('#buttonTXPacketFormattingOptions').onclick = function() {
+    
+  //
+  if(document.querySelector('#divTXPacketFormattingOptions').style.display === "") {
+    document.querySelector('#divTXPacketFormattingOptions').style.display = "none";
+  }
+  else {
+    document.querySelector('#divTXPacketFormattingOptions').style.display = "";
+    //change button text to hide advanced options etc...
+  }
+    
+};
 
 document.querySelector('#buttonFontP').onclick = function() {
     
@@ -361,6 +374,18 @@ document.querySelector('#buttonRXHide').onclick = function() {
     document.querySelector('#divRXSection').style.display = "";
   }  
 };
+//
+document.querySelector('#buttonHeaderHide').onclick = function() {
+    
+  if(document.querySelector('#divHeaderSection').style.display === "") {
+    document.querySelector('#divHeaderSection').style.display = "none";
+    document.querySelector('#divHeaderSectionHide').style.display = "";
+  }
+  else {
+    document.querySelector('#divHeaderSection').style.display = "";
+    document.querySelector('#divHeaderSectionHide').style.display = "none";
+  }  
+};
 
 //
 document.querySelector('#showNumberLines').onclick = function() {
@@ -404,3 +429,19 @@ document.querySelector('#handleRXErrors').onchange = function() {
   }
 
 };
+
+document.querySelector('#txPacketFormatChecksumOrCRCList').onchange = function() {
+  
+  //show example row identifier info
+  //document.querySelector('#rxFormateOptionExampleTimeStamp').style.display = "";
+  //document.querySelector('#rxFormateOptionExampleTimeStamp').style.color = "blue";
+  //document.querySelector('#rxFormateOptionExampleTimeStamp').innerHTML = getRowIdentifierText(0,false);
+
+};
+
+document.querySelector('#txPacketFormatProtocolList').onchange = function() {
+  
+
+
+};
+

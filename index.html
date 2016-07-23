@@ -9,102 +9,112 @@
   <!-- ############################################################## -->
   <p>
     <h1 id="heading">Awesome Terminal</h1>
-    Port Name
-    <select id="portList">
-    <!--<option value="/dev/ttyUSB0">A</option>-->
-    </select>
-    Baud Rate
-    <!-- Standatd baud rates [110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600] -->
-    <select id="baudRatesList">
-      <option value="110">110</option>
-      <option value="150">150</option>
-      <option value="300">300</option>
-      <option value="1200">1200</option>
-      <option value="2400">2400</option>
-      <option value="4800">4800</option>
-      <option value="9600">9600</option>
-      <option value="19200">19200</option>
-      <option value="38400">38400</option>
-      <option value="57600">57600</option>
-      <option value="115200">115200</option>
-      <option value="230400">230400</option>
-      <option value="460800">460800</option>
-      <option value="921600">921600</option>
-      <option value="Other">Other</option>
-    </select> <input type="number" id="customBaudRate" style="display: none;" />
+    <span class="customeHeadings">Port Settings</span>
+    <button id="buttonHeaderHide" type="button" style="float: right;" >hide</button>
   </p>
-  <button id="buttonAdvancedOptions"    type="button" >Advanced Options</button>
-  <button id="UIOptions"    type="button" >UI Options</button>
-  <button id="newInstance"    type="button" style="float: right;">New Window</button>
-  <div id="divAdvancedOptions" style="display: none;">
-    <hr>
+  <div id="divHeaderSection" style="">
     <p>
-      DataBits
-      <select id="DataBitsList">
-      <option value="eight">eight</option>
-      <option value="seven">seven</option>
+      Port Name
+      <select id="portList">
+      <!--<option value="/dev/ttyUSB0">A</option>-->
       </select>
+      Baud Rate
+      <!-- Standatd baud rates [110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600] -->
+      <select id="baudRatesList">
+        <option value="110">110</option>
+        <option value="150">150</option>
+        <option value="300">300</option>
+        <option value="1200">1200</option>
+        <option value="2400">2400</option>
+        <option value="4800">4800</option>
+        <option value="9600">9600</option>
+        <option value="19200">19200</option>
+        <option value="38400">38400</option>
+        <option value="57600">57600</option>
+        <option value="115200">115200</option>
+        <option value="230400">230400</option>
+        <option value="460800">460800</option>
+        <option value="921600">921600</option>
+        <option value="Other">Other</option>
+      </select> <input type="number" id="customBaudRate" style="display: none;" />
+    </p>
+    <button id="buttonAdvancedOptions"    type="button" >Advanced Options</button>
+    <button id="UIOptions"    type="button" >UI Options</button>
+    <button id="newInstance"    type="button" style="float: right;">New Window</button>
+    <div id="divAdvancedOptions" style="display: none;">
+      <hr>
+      <p>
+        DataBits
+        <select id="DataBitsList">
+        <option value="eight">eight</option>
+        <option value="seven">seven</option>
+        </select>
+      </p>
+      <p>
+        ParityBit
+        <select id="ParityBitList">
+        <option value="no">no</option>
+        <option value="odd">odd</option>
+        <option value="even">even</option>
+        </select>      
+      </p>
+      <p>
+        StopBits
+        <select id="StopBitsList">
+        <option value="one">one</option>
+        <option value="two">two</option>
+        </select>        
+      </p>
+      <p>
+        RTS/CTS hardware flow control
+        <select id="ctsFlowControlList">
+        <option value="false">false</option>
+        <option value="true">true</option>
+        </select>        
+      </p>
+      Handle RX Errors: <input class = "" type="checkbox" id="handleRXErrors" name="handleRXErrors" value="x">
+      <hr>
+    </div>
+    <div id="divUIOptions" style="display: none;">
+      <hr>
+      UI Options
+      <p>
+        FONT: <button id="buttonFontP"    type="button" >Font+</button>
+        <button id="buttonFontN"    type="button" >Font-</button>
+      </p>
+      <p>
+        <button id="buttonRestoreView"    type="button" >Restore View</button>
+      </p>
+      <p>
+        Window Nick Name:  <input class = "rxOption" id ="windowNickName"  title="" type="text" maxlength="32" size="20" value=""spellcheck="true">
+      </p>
+      <p>
+        Show Number Lines: <input class = "rxOption" type="checkbox" id="showNumberLines" name="showNumberLines" value="x">
+      </p>
+      <p> 
+        Number Line Start: <input class = "rxOption" id ="numberLineStartVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
+      </p>
+      <p> 
+        Number Line value padding: <input class = "rxOption" id ="numberLinePaddingVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
+      </p>
+      <p> 
+        Number Line start padding: <input class = "rxOption" id ="numberLineStartPaddingVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
+      </p>
+      <hr>
+    </div>
+    
+    <p>
+      <button id="buttonRefreshPorts"    type="button" >Search</button>
+      <button id="buttonConnectToPort"   type="button" >Connect</button>
     </p>
     <p>
-      ParityBit
-      <select id="ParityBitList">
-      <option value="no">no</option>
-      <option value="odd">odd</option>
-      <option value="even">even</option>
-      </select>      
+      <h1 id="portInfo">Text Goes Here</h1>
     </p>
-    <p>
-      StopBits
-      <select id="StopBitsList">
-      <option value="one">one</option>
-      <option value="two">two</option>
-      </select>        
-    </p>
-    <p>
-      RTS/CTS hardware flow control
-      <select id="ctsFlowControlList">
-      <option value="false">false</option>
-      <option value="true">true</option>
-      </select>        
-    </p>
-    Handle RX Errors: <input class = "" type="checkbox" id="handleRXErrors" name="handleRXErrors" value="x">
-    <hr>
   </div>
-  <div id="divUIOptions" style="display: none;">
-    <hr>
-    UI Options
-    <p>
-      FONT: <button id="buttonFontP"    type="button" >Font+</button>
-      <button id="buttonFontN"    type="button" >Font-</button>
-    </p>
-    <p>
-      <button id="buttonRestoreView"    type="button" >Restore View</button>
-    </p>
-    <p>
-      Window Nick Name:  <input class = "" id ="windowNickName"  title="" type="text" maxlength="32" size="20" value=""spellcheck="true">
-    </p>
-    <p>
-      Show Number Lines: <input class = "" type="checkbox" id="showNumberLines" name="showNumberLines" value="x">
-    </p>
-    <p> 
-      Number Line Start: <input class = "" id ="numberLineStartVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
-    </p>
-    <p> 
-      Number Line value padding: <input class = "" id ="numberLinePaddingVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
-    </p>
-    <p> 
-      Number Line start padding: <input class = "" id ="numberLineStartPaddingVal"  title="" type="number" maxlength="5" size="5" value="0"spellcheck="true">
-    </p>
+  <div id="divHeaderSectionHide" style="display: none;">
     <hr>
   </div>
   
-  <p>
-    <button id="buttonRefreshPorts"    type="button" >Search</button>
-    <button id="buttonConnectToPort"   type="button" >Connect</button>
-  </p>
-  <p>
-    <h1 id="portInfo">Text Goes Here</h1>
-  </p>
   <!-- ############################################################## -->
   <p>
     <span class="customeHeadings">User Input</span>
@@ -133,6 +143,7 @@
   <div id="divTXSection" style="">
   
     <button id="buttonTXOptions" type="button" >TX Options</button>
+    <button id="buttonTXPacketFormattingOptions" type="button" >Packet Formatting</button>
     <span style="float: right;" style="" id="txStatsByteCount">TX Byte count: NA</span>
     
     <div id="divTXOptions" style="display: none;">
@@ -180,6 +191,24 @@
           
         </p>
         Use TX options:<input class = "rxOption" type="checkbox" id="txFormateOptionSelected" name="txInputOptionSelected" value="x">
+      <hr>
+    </div>
+    <!--header Footer, Protocol Options etc -->
+    <div id="divTXPacketFormattingOptions" style="display: none;">
+      <p>
+        Append Checksum or CRC
+        <select class = "rxOption" id="txPacketFormatChecksumOrCRCList">
+          <option value="None">None</option>
+          
+        </select>
+      </p>
+      <p>
+        Apply Packet Protocol
+        <select class = "rxOption" id="txPacketFormatProtocolList">
+          <option value="None">None</option>
+          <option value="Custom 1">Custom 1</option>
+        </select>
+      </p>
       <hr>
     </div>
     
@@ -284,6 +313,7 @@
   <script type="text/javascript" src="serialHandler.js"></script>
   <script type="text/javascript" src="userInteraction.js"></script>
   <script type="text/javascript" src="stringFxn.js"></script>
+  <script type="text/javascript" src="protocolRoutineCustom.js"></script>
   
   
 <ol id="demo"></ol>

@@ -55,6 +55,9 @@ window.onload = function() {
   document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
   
+  //Set default to somthing common
+  document.getElementById('baudRatesList').value = "9600";
+ 
   initNumberLines();
   
 };
@@ -174,7 +177,7 @@ function serialConnectCallback(info) {
     if(periodicUpdateStarted !== true) {
       //else it is already running
       periodicUpdateStarted = true;
-      setTimeout(openConnectionPeriodChecks,1000);
+      setTimeout(openConnectionPeriodicChecks,1000);
     }
     
     //set footer info
@@ -191,17 +194,18 @@ function serialConnectCallback(info) {
   }  
 }
 
-function openConnectionPeriodChecks() {
+function openConnectionPeriodicChecks() {
   
-  console.log('openConnectionPeriodChecks()');
+  console.log('openConnectionPeriodicChecks()');
   
-  getControlLinesStatus();
+  //Was not using this for anything at this time
+  //getControlLinesStatus();
   
   
   //check again...soon
   if(periodicUpdateStarted === true) {
     
-    setTimeout(openConnectionPeriodChecks,5000);
+    setTimeout(openConnectionPeriodicChecks,5000);
   }
 }
 
@@ -810,6 +814,23 @@ function txUserInput() {
         }
       }
     }
+    
+    /*
+    Check to see if any of the Packet Formatting options are active
+    */
+    
+    var protcolSelection = document.querySelector('#txPacketFormatProtocolList').value;
+    
+    switch(protcolSelection)
+    {
+      case "Custom 1":
+        byteBuffer = protocolRoutineTXActionCustom1(byteBuffer);
+        break;
+      case "None":
+      default:
+        break;
+    }
+    
     
     sendData(byteBuffer);
     
