@@ -38,6 +38,7 @@ document.querySelector('#buttonRXClear').onclick = function() {
     
   //Clears the textbox
   document.querySelector('#termRX').value = "";
+  document.querySelector('#termRXProtocol').value = "";
     
   //filter counter
   rxFilterXNumberOfBytesCount = 0;
@@ -441,7 +442,23 @@ document.querySelector('#txPacketFormatChecksumOrCRCList').onchange = function()
 
 document.querySelector('#txPacketFormatProtocolList').onchange = function() {
   
+  //show RX proto break down
+  //<div id="divRXprotocolSection" style="display: none;">
 
+  var selectedOption = document.querySelector('#txPacketFormatProtocolList').value;
+
+  switch(selectedOption)
+  {
+    case "None":
+      //Hide
+      document.querySelector('#divRXprotocolSection').style.display = "none";
+      break;
+    default:
+      //Show
+      document.querySelector('#divRXprotocolSection').style.display = "";
+      document.querySelector('#rxFormateOptionSelected').checked = true;
+      break;
+  }
 
 };
 

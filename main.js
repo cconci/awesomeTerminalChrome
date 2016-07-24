@@ -412,6 +412,24 @@ function updateRXoutput(uint8View) {
     
       var nByte = getByteInUserSelectedFormat(uint8View[i]); 
       
+      //Protocol options
+      var protcolSelection = document.querySelector('#txPacketFormatProtocolList').value;
+      switch(protcolSelection)
+      {
+        case "Custom 1":
+          {
+            var retStr = protocolRoutineRXActionCustom1(uint8View[i]);
+          
+            if(retStr !== "")
+            {
+              document.querySelector('#termRXProtocol').value += retStr;
+              document.querySelector('#termRXProtocol').value += "\n";
+            }
+          }
+          break;
+      }
+      
+      
       if(document.querySelector('#rxFormateOptionAfterByteRB').checked === true) {
       
         if(rxFilterShowDate === 1) {
@@ -826,8 +844,8 @@ function txUserInput() {
       case "Custom 1":
         byteBuffer = protocolRoutineTXActionCustom1(byteBuffer);
         break;
-      case "None":
       default:
+      case "None":
         break;
     }
     
