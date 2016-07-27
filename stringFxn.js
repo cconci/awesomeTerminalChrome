@@ -22,6 +22,10 @@ function padStringLeft(stringToPad,NumberToPadFor,stringToPadWith) {
   
 }
 
+function arrayElementToDecimalString(arrayElement) {
+  return padStringLeft(arrayElement.toString(10),3,"0")+" ";
+}
+
 function arrayElementToBinaryString(arrayElement) {
   return padStringLeft(arrayElement.toString(2),8,"0")+" ";
 }

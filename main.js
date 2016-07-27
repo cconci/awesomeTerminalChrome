@@ -54,6 +54,8 @@ window.onload = function() {
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
+  
   
   //Set default to somthing common
   document.getElementById('baudRatesList').value = "9600";
@@ -198,8 +200,8 @@ function openConnectionPeriodicChecks() {
   
   console.log('openConnectionPeriodicChecks()');
   
-  //Was not using this for anything at this time
-  //getControlLinesStatus();
+  //
+  getControlLinesStatus();
   
   
   //check again...soon
@@ -424,6 +426,11 @@ function updateRXoutput(uint8View) {
             {
               document.querySelector('#termRXProtocol').value += retStr;
               document.querySelector('#termRXProtocol').value += "\n";
+              
+              //Auto Scroll
+              var ta = document.getElementById('termRXProtocol');
+              ta.scrollTop = ta.scrollHeight;
+              
             }
           }
           break;
@@ -580,6 +587,9 @@ function getByteInUserSelectedFormat(rxByte){
       break;
     case "Binary":
       retVar = arrayElementToBinaryString(rxByte);
+      break;
+    case "Decimal":
+      retVar = arrayElementToDecimalString(rxByte);
       break;
     
   }

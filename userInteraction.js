@@ -130,6 +130,7 @@ document.querySelector('#buttonFontP').onclick = function() {
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
    
 };
 
@@ -142,6 +143,8 @@ document.querySelector('#buttonFontN').onclick = function() {
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
+  
 };
 
 document.querySelector('#buttonConnectToPort').onclick = function() {
@@ -312,6 +315,10 @@ document.querySelector('#buttonRestoreView').onclick = function() {
   document.querySelector('#termRX').style.width= "98%";
   document.querySelector('#termRX').style.margin.left = "auto";
   document.querySelector('#termRX').style.margin.right = "auto";
+  
+  document.querySelector('#termRXProtocol').style.width= "98%";
+  document.querySelector('#termRXProtocol').style.margin.left = "auto";
+  document.querySelector('#termRXProtocol').style.margin.right = "auto";
   
 };
 
