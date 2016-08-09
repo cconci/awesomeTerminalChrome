@@ -11,11 +11,26 @@ function protocolRoutineTXActionCustom1(byteBuffer) {
   //use a DLE of 0x10 to SLIP the above two values
   
   var byteBufferView = new Int8Array(byteBuffer);
-  var slippArrayBufferSize = 3; //STX,ETX and checksum
+  var slippArrayBufferSize = 2; //STX & ETX
+  
+  var checkSumArray = new Uint8Array(1);   
+  checkSumArray[0] =0x02;
+  
   //get the length of the new array
-  for(i=0;i<byteBufferView.length;i++) {
+  for(i=0;i<(byteBufferView.length + 1);i++) { //+1 is so we check the checksum
     
-    switch(byteBufferView[i]) {
+    var byteToCheck = byteBufferView[i];
+    
+    if(i == byteBufferView.length)
+    {
+      byteToCheck = (0xFF - checkSumArray[0]);
+    }
+    else
+    {
+      checkSumArray[0] += byteBufferView[i];  
+    }
+    
+    switch(byteToCheck) {
       case 0x02:
       case 0x03:
       case 0x10:
@@ -34,43 +49,39 @@ function protocolRoutineTXActionCustom1(byteBuffer) {
   
   var slippedByteBufferViewPntr = 0;
   
-  var checkSumArray = new Uint8Array(1);   
-  checkSumArray[0] =0x02;
-  //var checkSum = 0x02;
-  
-  
   slippedByteBufferView[slippedByteBufferViewPntr++] = 0x02;
   
-  for(i=0;i<byteBufferView.length;i++) {
+  for(i=0;i<(byteBufferView.length+1);i++) { //+1 for the checksum
     
-    //checkSum += byteBufferView[i];
-    checkSumArray[0] += byteBufferView[i];
+    var byteToAdd = byteBufferView[i];
     
-    switch(byteBufferView[i]) {
+    if(i == byteBufferView.length)
+    {
+      byteToAdd = (0xFF - checkSumArray[0]);
+    }
+
+    switch(byteToAdd) {
       case 0x02:
       case 0x03:
       case 0x10:
         //Slip this byte
         slippedByteBufferView[slippedByteBufferViewPntr++] = 0x10;
-        slippedByteBufferView[slippedByteBufferViewPntr++] = (byteBufferView[i] | 0x40);
+        slippedByteBufferView[slippedByteBufferViewPntr++] = (byteToAdd | 0x40);
         break;
       default:
-        slippedByteBufferView[slippedByteBufferViewPntr++] = byteBufferView[i];
+        slippedByteBufferView[slippedByteBufferViewPntr++] = byteToAdd;
         break;
     }
     
   }
   
-  //console.log("["+checkSumArray[0]+"],["+checkSum+"]");
   
-  slippedByteBufferView[slippedByteBufferViewPntr++] = (0xFF - checkSumArray[0]);
   slippedByteBufferView[slippedByteBufferViewPntr++] = 0x03;
   
   //for(i=0;i<slippedByteBufferView.length;i++)
   //{
   //  console.log("["+slippedByteBufferView[i]+"],");
   //}
-  
   
   return slippedByteBuffer;
 }

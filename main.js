@@ -62,7 +62,15 @@ window.onload = function() {
  
   initNumberLines();
   
+  //chrome.runtime.onSuspend.addListener(extensionOnClose);
+  
 };
+function extensionOnClose() {
+  
+  disconnectFromPort();
+  
+  console.log("Window Closing");
+}
 
 function windowBoundsChanged() {
   console.log("Windows bounds have changed");
@@ -275,6 +283,8 @@ function readDataErrorCallback(info){
   
   var errorDetails = "--";
   
+  var unPause = 0;
+  
   switch(info.error){
     
     case "disconnected":
@@ -287,9 +297,15 @@ function readDataErrorCallback(info){
       errorDetails = "device_lost";
       break;
     case "break":
+      
+      unPause = 1;
+      
       errorDetails = "break";
       break;
     case "frame_error":
+      
+      unPause = 1;
+      
       errorDetails = "frame_error";
       break;
     case "overrun":
@@ -299,11 +315,10 @@ function readDataErrorCallback(info){
       errorDetails = "buffer_overflow";
       break;
     case "parity_error":
+      
+      unPause = 1;
+      
       errorDetails = "parity_error";
-      
-      //Connection is paused when called
-      chrome.serial.setPaused(connectionId, false, serialSetPausedCallback);
-      
       break;
     case "system_error":
       errorDetails = "system_error";
@@ -313,6 +328,13 @@ function readDataErrorCallback(info){
       break;
 
   }
+  
+  if(unPause == 1)
+  {
+    //Connection is paused when called, I dnt want it to pause :)
+    chrome.serial.setPaused(connectionId, false, serialSetPausedCallback);    
+  }
+  
   
   console.log('readDataErrorCallback():Error:'+errorDetails+'|'+info.error);
   

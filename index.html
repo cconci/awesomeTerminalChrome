@@ -40,6 +40,7 @@
     </p>
     <button id="buttonAdvancedOptions"    type="button" >Advanced Options</button>
     <button id="UIOptions"    type="button" >UI Options</button>
+    <button id="buttonStatistics" type="button" >Statistics</button>
     <button id="newInstance"    type="button" style="float: right;">New Window</button>
     <div id="divAdvancedOptions" style="display: none;">
       <hr>
@@ -102,10 +103,16 @@
       </p>
       <hr>
     </div>
-    
+        <div id="divStatistics" style="display: none;">
+      <hr>
+      Statistics
+
+      <hr>
+    </div>
     <p>
       <button id="buttonRefreshPorts"    type="button" >Search</button>
       <button id="buttonConnectToPort"   type="button" >Connect</button>
+      <button id="buttonDisconnectFromPort"   type="button" >Disconnect</button>
     </p>
     <p>
       <h1 id="portInfo">Text Goes Here</h1>
@@ -239,6 +246,7 @@
   <div id="divRXSection" style="">
   
     <button id="buttonRXOptions" type="button" >RX Options</button>
+    
     <span style="float: right;" style="" id="rxStatsByteCount">RX Byte count: NA</span>
     
     <div id="divRXOptions" style="display: none;">

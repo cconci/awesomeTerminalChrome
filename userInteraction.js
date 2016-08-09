@@ -153,6 +153,14 @@ document.querySelector('#buttonConnectToPort').onclick = function() {
   connectToPort();
 };
 
+document.querySelector('#buttonDisconnectFromPort').onclick = function() {
+    
+  //
+  disconnectFromPort();
+  
+};
+
+
 document.querySelector('#UIOptions').onclick = function() {
     
   if(document.querySelector('#divUIOptions').style.display === "") {
