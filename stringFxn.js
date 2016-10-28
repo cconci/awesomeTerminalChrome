@@ -183,6 +183,12 @@ function arrayElementsToString(arrayData) {
   return output;
 }
 
+function hexStringToByte(hexString) {
+  
+  return parseInt(hexString,'16');
+  
+}
+
 function hexStringToByteArray(hexString) {
   
   /*
@@ -216,7 +222,24 @@ function hexStringToByteArray(hexString) {
     
     //form each byte 
     //http://www.w3schools.com/jsref/jsref_parseint.asp
-    var byte = parseInt(splitHexString[i],'16'); //it is a hex string, thus 16
+    var byte;
+    
+    if(splitHexString[i] === '?') //special feature, puts a random byte in this position
+    {
+      byte = Math.floor((Math.random() * 256) + 0);  
+    }
+    else if(splitHexString[i] === "?+") //special feature, puts auto incrementing byte in the buffer
+    {
+      //static var in js
+      hexStringToByteArray.autoIncNumber = hexStringToByteArray.autoIncNumber || 0;
+      
+      byte =  hexStringToByteArray.autoIncNumber;
+      hexStringToByteArray.autoIncNumber++;
+    }
+    else
+    {
+      byte = parseInt(splitHexString[i],'16'); //it is a hex string, thus 16
+    }
     
     byteBufferView[i] = byte;
     

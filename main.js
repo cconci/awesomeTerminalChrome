@@ -322,6 +322,9 @@ function readDataErrorCallback(info){
       break;
     case "system_error":
       errorDetails = "system_error";
+      
+      unPause = 1;
+      
       break;
     default:
       errorDetails = "Unknown_error";
@@ -338,7 +341,7 @@ function readDataErrorCallback(info){
   
   console.log('readDataErrorCallback():Error:'+errorDetails+'|'+info.error);
   
-  document.querySelector('#termRX').value += "\n"+'[RX ERROR:'+errorDetails+']'+"\n";
+  addToTerminal("\n"+'[RX ERROR:'+errorDetails+']'+"\n",'#termRX');
  
   autoScrollRxWindow();
  
@@ -436,6 +439,14 @@ function updateRXoutput(uint8View) {
     
       var nByte = getByteInUserSelectedFormat(uint8View[i]); 
       
+      //byteFrequencyAnalysis
+      if(document.querySelector('#byteFrequencyAnalysis').checked === true) {
+        
+        //inc the count for the particular byte
+        //statsRxDataFrequencyCounter[nByte]++;
+        
+      }
+      
       //Protocol options
       var protcolSelection = document.querySelector('#txPacketFormatProtocolList').value;
       switch(protcolSelection)
@@ -446,8 +457,8 @@ function updateRXoutput(uint8View) {
           
             if(retStr !== "")
             {
-              document.querySelector('#termRXProtocol').value += retStr;
-              document.querySelector('#termRXProtocol').value += "\n";
+              addToTerminal( retStr,'#termRXProtocol');
+              addToTerminal( "\n",'#termRXProtocol');
               
               //Auto Scroll
               var ta = document.getElementById('termRXProtocol');
@@ -462,49 +473,48 @@ function updateRXoutput(uint8View) {
       if(document.querySelector('#rxFormateOptionAfterByteRB').checked === true) {
       
         if(rxFilterShowDate === 1) {
-          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
+          addToTerminal(getRowIdentifierText(0,true),'#termRX');
           
           rxFilterShowDate = 0; //clear
         }
         
         //use to string to show the value in hex (that is the way it is entered on the UI)
-        if(document.querySelector('#rxFormateOptionAfterByte').value.toLowerCase() === uint8View[i].toString(16)) {
+        if(hexStringToByte(document.querySelector('#rxFormateOptionAfterByte').value.toLowerCase()) === uint8View[i]) {
           
           //after Byte, so we show the byte first
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal( nByte,'#termRX');
           
           //show byte and put \n
-          document.querySelector('#termRX').value += "\n";
+          addToTerminal("\n",'#termRX');
           
           rxFilterShowDate = 1;
           
         }
         else {
           //Show byte
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal( nByte,'#termRX');
         }
         
       }
       else if(document.querySelector('#rxFormateOptionBeforeByteRB').checked === true) {
         
         //use to string to show the value in hex (that is the way it is entered on the UI)
-        if(document.querySelector('#rxFormateOptionBeforeByte').value.toLowerCase() === uint8View[i].toString(16)) {
+        if(hexStringToByte(document.querySelector('#rxFormateOptionBeforeByte').value.toLowerCase()) === uint8View[i]) {
           
           //Before Byte, so we show the \n first
         
           //show byte and put \n
-          document.querySelector('#termRX').value += "\n";
-          
           //show row identifier
-          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
-          
           //show byte
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal("\n" 
+            + getRowIdentifierText(0,true) 
+            + nByte,'#termRX');
+          
           
         }
         else {
           //Show byte
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal(nByte,'#termRX');
         }
         
       }
@@ -521,16 +531,14 @@ function updateRXoutput(uint8View) {
         
         if(timeBetweenBytes > document.querySelector('#rxFormateOptionAfterTime').value) {
           
-          document.querySelector('#termRX').value += "\n";
-          
-          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
-          
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal("\n"
+              + getRowIdentifierText(0,true)
+              + nByte ,'#termRX');
           
         }
         else {
           
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal(nByte,'#termRX');
         }
         
       }
@@ -542,16 +550,14 @@ function updateRXoutput(uint8View) {
         if(rxFilterXNumberOfBytesCount >= document.querySelector('#rxFormateOptionAfterBytes').value
         || rxFilterXNumberOfBytesCount === 0 ) {
           
-          document.querySelector('#termRX').value += "\n";
-          
-          document.querySelector('#termRX').value += getRowIdentifierText(0,true);
-          
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal( "\n"
+            + getRowIdentifierText(0,true)
+            + nByte,'#termRX');
           
           rxFilterXNumberOfBytesCount = 0;//zero the counter
         }
         else {
-          document.querySelector('#termRX').value += nByte;
+          addToTerminal(nByte,'#termRX');
         }
         
         rxFilterXNumberOfBytesCount++;
@@ -559,7 +565,7 @@ function updateRXoutput(uint8View) {
       }
       else {
         //normal
-        document.querySelector('#termRX').value += nByte;
+        addToTerminal(nByte,'#termRX');
       }
     }
     
@@ -567,7 +573,7 @@ function updateRXoutput(uint8View) {
   else {
   
     //just add to the output window
-    document.querySelector('#termRX').value += arrayElementsToString(uint8View);
+    addToTerminal(arrayElementsToString(uint8View),'#termRX');
   }
   
   autoScrollRxWindow();
@@ -885,15 +891,31 @@ function txUserInput() {
     sendData(byteBuffer);
     
     //row Identifier
-    document.querySelector('#termTX').value += getRowIdentifierText(1,true);
-    //Sent Data
-    document.querySelector('#termTX').value += (arrayElementsToString(new Uint8Array(byteBuffer)) +"\n");
+    addToTerminal(getRowIdentifierText(1,true) + arrayElementsToString(new Uint8Array(byteBuffer)) +"\n",'#termTX');
     
     //auto scroll
     var ta = document.getElementById('termTX');
     ta.scrollTop = ta.scrollHeight;
     
   }  
+  
+}
+
+function addToTerminal(textToAdd,terminal) {
+  
+  currentText = document.querySelector(terminal).value;
+  
+  currentText += textToAdd;
+  
+  maxText = document.querySelector('#terminalMaxBytes').value;
+  
+  //we cut out the earliest data
+  if(currentText.length > maxText)
+  {
+    currentText = currentText.substr(currentText.length - maxText);
+  }
+  
+  document.querySelector(terminal).value = currentText;
   
 }
 

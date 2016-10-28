@@ -173,6 +173,17 @@ document.querySelector('#UIOptions').onclick = function() {
     
 };
 
+document.querySelector('#buttonStatistics').onclick = function() {
+  
+  if(document.querySelector('#divStatistics').style.display === "") {
+    document.querySelector('#divStatistics').style.display = "none";
+  }
+  else {
+    document.querySelector('#divStatistics').style.display = "";
+    //change button text to hide advanced options etc...
+  }  
+};
+
 /*
 RX Option Selections
 */
