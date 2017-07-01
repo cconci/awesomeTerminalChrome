@@ -38,7 +38,6 @@ document.querySelector('#buttonRXClear').onclick = function() {
     
   //Clears the textbox
   document.querySelector('#termRX').value = "";
-  document.querySelector('#termRXProtocol').value = "";
     
   //filter counter
   rxFilterXNumberOfBytesCount = 0;
@@ -48,6 +47,19 @@ document.querySelector('#buttonRXClear').onclick = function() {
     
   updateStatsCounters();
 };
+
+document.querySelector('#buttonRXProtoClear').onclick = function() {
+    
+  //Clears the textbox
+  document.querySelector('#termRXProtocol').value = "";
+}
+
+document.querySelector('#buttonRXFilterClear').onclick = function() {
+    
+  //Clears the textbox
+  document.querySelector('#termRXFilter').value = "";
+}
+
 document.querySelector('#buttonRefreshPorts').onclick = function() {
     
   //
@@ -125,12 +137,8 @@ document.querySelector('#buttonFontP').onclick = function() {
     
   //
   currentFontSize++;
-  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
+  
+  updateAllTerminalFontSettings();
    
 };
 
@@ -138,12 +146,9 @@ document.querySelector('#buttonFontN').onclick = function() {
     
   //
   currentFontSize--;
-  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
+  
+  updateAllTerminalFontSettings();
+    
   
 };
 
@@ -193,6 +198,7 @@ document.querySelector('#rxFormateOptionAfterByte').onchange = function() {
   //Set the Radio Button as selected
   document.querySelector('#rxFormateOptionAfterByteRB').checked = true;
   document.querySelector('#rxFormateOptionSelected').checked = true;
+  ui_update_rxFormateOptionSelected();
 
 };
 
@@ -201,6 +207,7 @@ document.querySelector('#rxFormateOptionBeforeByte').onchange = function() {
   //Set the Radio Button as selected
   document.querySelector('#rxFormateOptionBeforeByteRB').checked = true;
   document.querySelector('#rxFormateOptionSelected').checked = true;
+  ui_update_rxFormateOptionSelected();
 
 };
 
@@ -209,6 +216,7 @@ document.querySelector('#rxFormateOptionAfterTime').onchange = function() {
   //Set the Radio Button as selected
   document.querySelector('#rxFormateOptionAfterTimeRB').checked = true;
   document.querySelector('#rxFormateOptionSelected').checked = true;
+  ui_update_rxFormateOptionSelected();
 
 };
 
@@ -217,6 +225,7 @@ document.querySelector('#rxFormateOptionAfterBytes').onchange = function() {
   //Set the Radio Button as selected
   document.querySelector('#rxFormateOptionAfterBytesRB').checked = true;
   document.querySelector('#rxFormateOptionSelected').checked = true;
+  ui_update_rxFormateOptionSelected();
 
 };
 
@@ -232,18 +241,20 @@ document.querySelector('#rxDateTimeStampList').onchange = function() {
 document.querySelector('#rxOutputFormatList').onchange = function() {
   
   document.querySelector('#rxFormateOptionSelected').checked = true;
+  ui_update_rxFormateOptionSelected();
   
 };
 
 document.querySelector('#rxAppendStringBefore').onchange = function() {
   
   document.querySelector('#rxFormateOptionSelected').checked = true;
-  
+  ui_update_rxFormateOptionSelected();
 };
 
 document.querySelector('#rxAppendStringAfter').onchange = function() {
   
   document.querySelector('#rxFormateOptionSelected').checked = true;
+  ui_update_rxFormateOptionSelected();
   
 };
 
@@ -318,6 +329,32 @@ document.querySelector('#buttonRXCopyToCB').onclick = function() {
   document.getElementById("termRX").disabled = true;
 };
 
+document.querySelector('#buttonRXProtoCopyToCB').onclick = function() {
+  
+  //need to enabel or I can not select
+  document.getElementById("termRXProtocol").disabled = false; 
+  
+  //select the textarea & copy to clipboard
+  document.getElementById("termRXProtocol").select();
+  document.execCommand('copy');
+  
+  //return to normal
+  document.getElementById("termRXProtocol").disabled = true;
+};
+
+document.querySelector('#buttonRXFilterCopyToCB').onclick = function() {
+  
+  //need to enabel or I can not select
+  document.getElementById("termRXFilter").disabled = false; 
+  
+  //select the textarea & copy to clipboard
+  document.getElementById("termRXFilter").select();
+  document.execCommand('copy');
+  
+  //return to normal
+  document.getElementById("termRXFilter").disabled = true;
+};
+
 document.querySelector('#buttonRestoreView').onclick = function() {
   
   //restore view options to the textarea, if they have been dragged
@@ -339,6 +376,9 @@ document.querySelector('#buttonRestoreView').onclick = function() {
   document.querySelector('#termRXProtocol').style.margin.left = "auto";
   document.querySelector('#termRXProtocol').style.margin.right = "auto";
   
+  document.querySelector('#termRXFilter').style.width= "98%";
+  document.querySelector('#termRXFilter').style.margin.left = "auto";
+  document.querySelector('#termRXFilter').style.margin.right = "auto";
 };
 
 document.querySelector('#newInstance').onclick = function() {
@@ -448,7 +488,7 @@ document.querySelector('#numberLinePaddingVal').onchange = function() {
 
 document.querySelector('#handleRXErrors').onchange = function() {
 
-   if(document.querySelector('#handleRXErrors').checked === true) {
+  if(document.querySelector('#handleRXErrors').checked === true) {
     addOnReciveListener();
   }
   else {
@@ -483,8 +523,54 @@ document.querySelector('#txPacketFormatProtocolList').onchange = function() {
       //Show
       document.querySelector('#divRXprotocolSection').style.display = "";
       document.querySelector('#rxFormateOptionSelected').checked = true;
+      ui_update_rxFormateOptionSelected();
       break;
   }
 
 };
 
+document.querySelector('#rxFormateOptionSelected').onchange = function() {
+
+  ui_update_rxFormateOptionSelected();
+};
+
+document.querySelector('#rxFilterOptionSelected').onchange = function() {
+  ui_update_rxFilterOptionSelected();
+};
+
+document.querySelector('#divRXOptionsFilterByteNumber').onchange = function() {
+    
+    document.querySelector('#rxFilterOptionSelected').checked = true;
+    ui_update_rxFilterOptionSelected();
+}
+
+document.querySelector('#divRXOptionsFilterByteValue').onchange = function() {
+    
+    document.querySelector('#rxFilterOptionSelected').checked = true;
+    ui_update_rxFilterOptionSelected();
+}
+
+/*************************************************************************************************
+
+*************************************************************************************************/
+function ui_update_rxFormateOptionSelected(){
+  if(document.querySelector('#rxFormateOptionSelected').checked === true) {
+    document.querySelector('#divRXOptionsFilter').style.display = "";
+    
+  }
+  else {
+    document.querySelector('#divRXOptionsFilter').style.display = "none";
+    
+  }  
+}
+
+function ui_update_rxFilterOptionSelected(){
+  if(document.querySelector('#rxFilterOptionSelected').checked === true) {
+    
+    document.querySelector('#divRXFilterSection').style.display = "";
+  }
+  else {
+    
+    document.querySelector('#divRXFilterSection').style.display = "none";
+  }  
+}

@@ -28,6 +28,9 @@ var automateSetTimeoutIDs = [];
 var txLastTimeStamp = 0;
 var rxLastTimeStamp = 0;
 
+var rxPacketFilterCollectedData = [];
+var rxPacketFilterCollectedDataPntr = 0;
+var rxPacketFilterCollectedDataOutPutStr = "";
 /*
 List all ports into drop down box on main page 
 */
@@ -49,12 +52,7 @@ window.onload = function() {
   
   updateStatsCounters();
   
-  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
-  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
+ updateAllTerminalFontSettings();
   
   
   //Set default to somthing common
@@ -427,6 +425,37 @@ function updateStatsCounters()  {
   
 }
 
+function processRxPacketFilterData() {
+
+    if(document.querySelector('#rxFormateOptionSelected').checked === true) {
+        
+        var indexOfByteToCheck = hexStringToByte(document.querySelector('#divRXOptionsFilterByteNumber').value.toLowerCase());
+        var indexOfByteValueTOLookFor = hexStringToByte(document.querySelector('#divRXOptionsFilterByteValue').value.toLowerCase());
+        
+        //rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++]
+        
+        if(indexOfByteToCheck < rxPacketFilterCollectedDataPntr)
+        {
+            if(indexOfByteValueTOLookFor === rxPacketFilterCollectedData[indexOfByteToCheck])
+            {
+               //Display the Packet in the Filter Packet Window
+               addToTerminal( rxPacketFilterCollectedDataOutPutStr,'#termRXFilter');
+               addToTerminal( "\n",'#termRXFilter');
+
+               //Auto Scroll
+               var ta = document.getElementById('termRXFilter');
+               ta.scrollTop = ta.scrollHeight;
+
+            }
+        }
+        
+        //Reset
+        rxPacketFilterCollectedDataPntr = 0;
+        rxPacketFilterCollectedDataOutPutStr = "";
+    }
+    
+}
+
 function updateRXoutput(uint8View) {
   
   if(document.querySelector('#rxFormateOptionSelected').checked === true) {
@@ -447,6 +476,15 @@ function updateRXoutput(uint8View) {
         
       }
       
+      if(document.querySelector('#rxFormateOptionSelected').checked === true) {
+        
+        //Collect the Data to Show the Filtered output, Proc & reset on a '/n'
+        rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++] = uint8View[i];
+        
+        rxPacketFilterCollectedDataOutPutStr += nByte;
+          
+      }
+        
       //Protocol options
       var protcolSelection = document.querySelector('#txPacketFormatProtocolList').value;
       switch(protcolSelection)
@@ -487,6 +525,8 @@ function updateRXoutput(uint8View) {
           //show byte and put \n
           addToTerminal("\n",'#termRX');
           
+          processRxPacketFilterData();
+            
           rxFilterShowDate = 1;
           
         }
@@ -510,6 +550,7 @@ function updateRXoutput(uint8View) {
             + getRowIdentifierText(0,true) 
             + nByte,'#termRX');
           
+          processRxPacketFilterData();
           
         }
         else {
@@ -535,6 +576,7 @@ function updateRXoutput(uint8View) {
               + getRowIdentifierText(0,true)
               + nByte ,'#termRX');
           
+          processRxPacketFilterData();
         }
         else {
           
@@ -555,6 +597,8 @@ function updateRXoutput(uint8View) {
             + nByte,'#termRX');
           
           rxFilterXNumberOfBytesCount = 0;//zero the counter
+            
+          processRxPacketFilterData();
         }
         else {
           addToTerminal(nByte,'#termRX');
@@ -951,3 +995,14 @@ function initNumberLines() {
   
 }
 
+function updateAllTerminalFontSettings(){
+  
+  document.querySelector('#termInput').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXFilter').style.fontSize = currentFontSize+"px";
+    
+}

@@ -311,6 +311,15 @@ Enter ?+ to place an incrementing byte
           
         </p>
         Use RX formating options:<input class = "rxOption" type="checkbox" id="rxFormateOptionSelected" name="rxFormateOptionSelected" value="x">
+        <div id="divRXOptionsFilter" style="display: none;">
+          <h3> - RX Filter - Show Data if,</h3>
+          <p>  - Byte at index 
+            <input class = "" id ="divRXOptionsFilterByteNumber" title="a number (DEC)" type="text" name="divRXOptionsFilterByteNumber" maxlength="3" size="4">
+            is equal to Byte(HEX)
+            <input class = "" id ="divRXOptionsFilterByteValue" title="a byte value" type="text" name="divRXOptionsFilterByteValue" maxlength="2" size="4">            
+          </p>
+          Use RX Filter:<input class = "rxOption" type="checkbox" id="rxFilterOptionSelected" name="rxFilterOptionSelected" value="x">
+        </div>
       <hr>
     </div>
     <p>
@@ -333,6 +342,17 @@ Enter ?+ to place an incrementing byte
     <p>
       <textarea id ="termRXProtocol" rows="4" cols="80" spellcheck="false" disabled></textarea>
     </p>
+    <button id="buttonRXProtoClear" type="button" >Clear</button>
+    <button id="buttonRXProtoCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
+  </div>
+  <!-- ############################################################## -->
+  <div id="divRXFilterSection" style="display: none;">
+    <h3>RX Filter</h3>
+    <p>
+      <textarea id ="termRXFilter" rows="4" cols="80" spellcheck="false" disabled></textarea>
+    </p>
+    <button id="buttonRXFilterClear" type="button" >Clear</button>
+    <button id="buttonRXFilterCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   </div>
 
 
