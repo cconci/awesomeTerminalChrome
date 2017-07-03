@@ -339,18 +339,36 @@ Enter ?+ to place an incrementing byte
   <!-- ############################################################## -->
   <div id="divRXprotocolSection" style="display: none;">
     <h3>RX Protocol Filter</h3>
+    <span style="float: right;" style="" id="rxStatsProtocolCount">RX Packet count: NA</span>
     <p>
       <textarea id ="termRXProtocol" rows="4" cols="80" spellcheck="false" disabled></textarea>
     </p>
+    
+    <!--Number Line -->
+    <div id="termRXProtocolNumberLineHide" style="display: none;">
+      <p>
+        <textarea id ="termRXProtocolNumberLine" rows="1" cols="80" spellcheck="false" style="resize: none;overflow:hidden;" disabled></textarea>
+      </p>
+    </div>  
+    
     <button id="buttonRXProtoClear" type="button" >Clear</button>
     <button id="buttonRXProtoCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   </div>
   <!-- ############################################################## -->
   <div id="divRXFilterSection" style="display: none;">
     <h3>RX Filter</h3>
+    <span style="float: right;" style="" id="rxStatsFilterCount">RX Packet count: NA</span>
     <p>
       <textarea id ="termRXFilter" rows="4" cols="80" spellcheck="false" disabled></textarea>
     </p>
+      
+    <!--Number Line -->
+    <div id="termRXFilterNumberLineHide" style="display: none;">
+      <p>
+        <textarea id ="termRXFilterNumberLine" rows="1" cols="80" spellcheck="false" style="resize: none;overflow:hidden;" disabled></textarea>
+      </p>
+    </div> 
+      
     <button id="buttonRXFilterClear" type="button" >Clear</button>
     <button id="buttonRXFilterCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   </div>

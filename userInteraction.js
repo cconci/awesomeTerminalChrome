@@ -52,12 +52,20 @@ document.querySelector('#buttonRXProtoClear').onclick = function() {
     
   //Clears the textbox
   document.querySelector('#termRXProtocol').value = "";
+  
+  rxPacketPacketCount = 0;
+  
+  updateStatsCounters();
 }
 
 document.querySelector('#buttonRXFilterClear').onclick = function() {
     
   //Clears the textbox
   document.querySelector('#termRXFilter').value = "";
+  
+  rxPacketFilterCount = 0;
+  
+  updateStatsCounters();
 }
 
 document.querySelector('#buttonRefreshPorts').onclick = function() {
@@ -412,10 +420,12 @@ document.querySelector('#buttonUserInputHide').onclick = function() {
   if(document.querySelector('#divUserInputSection').style.display === "") {
     document.querySelector('#divUserInputSection').style.display = "none";
     document.querySelector('#divUserInputSectionHide').style.display = "";
+    document.getElementById('buttonUserInputHide').innerHTML = "show";
   }
   else {
     document.querySelector('#divUserInputSection').style.display = "";
     document.querySelector('#divUserInputSectionHide').style.display = "none";
+    document.getElementById('buttonUserInputHide').innerHTML = "hide";
   }  
 };
 
@@ -425,10 +435,12 @@ document.querySelector('#buttonTXHide').onclick = function() {
   if(document.querySelector('#divTXSection').style.display === "") {
     document.querySelector('#divTXSection').style.display = "none";
     document.querySelector('#divTXSectionHide').style.display = "";
+    document.getElementById('buttonTXHide').innerHTML = "show";
   }
   else {
     document.querySelector('#divTXSection').style.display = "";
     document.querySelector('#divTXSectionHide').style.display = "none";
+    document.getElementById('buttonTXHide').innerHTML = "hide";
   }  
 };
 // - 
@@ -436,9 +448,11 @@ document.querySelector('#buttonRXHide').onclick = function() {
     
   if(document.querySelector('#divRXSection').style.display === "") {
     document.querySelector('#divRXSection').style.display = "none";
+    document.getElementById('buttonRXHide').innerHTML = "show";
   }
   else {
     document.querySelector('#divRXSection').style.display = "";
+    document.getElementById('buttonRXHide').innerHTML = "hide";
   }  
 };
 //
@@ -447,10 +461,12 @@ document.querySelector('#buttonHeaderHide').onclick = function() {
   if(document.querySelector('#divHeaderSection').style.display === "") {
     document.querySelector('#divHeaderSection').style.display = "none";
     document.querySelector('#divHeaderSectionHide').style.display = "";
+    document.getElementById('buttonHeaderHide').innerHTML = "show";
   }
   else {
     document.querySelector('#divHeaderSection').style.display = "";
     document.querySelector('#divHeaderSectionHide').style.display = "none";
+    document.getElementById('buttonHeaderHide').innerHTML = "hide";
   }  
 };
 
@@ -460,10 +476,16 @@ document.querySelector('#showNumberLines').onclick = function() {
   if(document.querySelector('#termTXNumberLineHide').style.display === "") {
     document.querySelector('#termTXNumberLineHide').style.display = "none";
     document.querySelector('#termRXNumberLineHide').style.display = "none";
+      
+    document.querySelector('#termRXProtocolNumberLineHide').style.display = "none";
+    document.querySelector('#termRXFilterNumberLineHide').style.display = "none";
   }
   else {
     document.querySelector('#termTXNumberLineHide').style.display = "";
     document.querySelector('#termRXNumberLineHide').style.display = "";
+    
+    document.querySelector('#termRXProtocolNumberLineHide').style.display = "";
+    document.querySelector('#termRXFilterNumberLineHide').style.display = "";
   }
   
 };

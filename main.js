@@ -28,6 +28,9 @@ var automateSetTimeoutIDs = [];
 var txLastTimeStamp = 0;
 var rxLastTimeStamp = 0;
 
+var rxPacketPacketCount = 0
+
+var rxPacketFilterCount = 0
 var rxPacketFilterCollectedData = [];
 var rxPacketFilterCollectedDataPntr = 0;
 var rxPacketFilterCollectedDataOutPutStr = "";
@@ -423,13 +426,32 @@ function updateStatsCounters()  {
   document.querySelector('#txStatsByteCount').innerHTML = "TX Byte Count:"+ padStringLeft(txByteCount+"",4," ");
   document.querySelector('#rxStatsByteCount').innerHTML = "RX Byte Count:"+ padStringLeft(rxByteCount+"",4," ");
   
+  document.querySelector('#rxStatsProtocolCount').innerHTML = "RX Packet Count:"+ padStringLeft(rxPacketPacketCount+"",4," ");
+  document.querySelector('#rxStatsFilterCount').innerHTML = "RX Packet Count:"+ padStringLeft(rxPacketFilterCount+"",4," ");
+  
+}
+
+function collectRxPacketFilterData(rawByte,outputStr) {
+  
+  if(document.querySelector('#rxFormateOptionSelected').checked === true) {
+
+    //Collect the Data to Show the Filtered output, Proc & reset on a '/n'
+    rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++] = rawByte;
+
+    rxPacketFilterCollectedDataOutPutStr += outputStr;
+
+  }
+  else {
+    rxPacketFilterCollectedDataPntr = 0;
+  }
+  
 }
 
 function processRxPacketFilterData() {
 
     if(document.querySelector('#rxFormateOptionSelected').checked === true) {
         
-        var indexOfByteToCheck = hexStringToByte(document.querySelector('#divRXOptionsFilterByteNumber').value.toLowerCase());
+        var indexOfByteToCheck = document.querySelector('#divRXOptionsFilterByteNumber').value;
         var indexOfByteValueTOLookFor = hexStringToByte(document.querySelector('#divRXOptionsFilterByteValue').value.toLowerCase());
         
         //rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++]
@@ -446,6 +468,7 @@ function processRxPacketFilterData() {
                var ta = document.getElementById('termRXFilter');
                ta.scrollTop = ta.scrollHeight;
 
+               rxPacketFilterCount++;
             }
         }
         
@@ -475,15 +498,6 @@ function updateRXoutput(uint8View) {
         //statsRxDataFrequencyCounter[nByte]++;
         
       }
-      
-      if(document.querySelector('#rxFormateOptionSelected').checked === true) {
-        
-        //Collect the Data to Show the Filtered output, Proc & reset on a '/n'
-        rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++] = uint8View[i];
-        
-        rxPacketFilterCollectedDataOutPutStr += nByte;
-          
-      }
         
       //Protocol options
       var protcolSelection = document.querySelector('#txPacketFormatProtocolList').value;
@@ -501,6 +515,8 @@ function updateRXoutput(uint8View) {
               //Auto Scroll
               var ta = document.getElementById('termRXProtocol');
               ta.scrollTop = ta.scrollHeight;
+              
+              rxPacketPacketCount++;
               
             }
           }
@@ -521,6 +537,7 @@ function updateRXoutput(uint8View) {
           
           //after Byte, so we show the byte first
           addToTerminal( nByte,'#termRX');
+          collectRxPacketFilterData(uint8View[i],nByte);
           
           //show byte and put \n
           addToTerminal("\n",'#termRX');
@@ -533,6 +550,7 @@ function updateRXoutput(uint8View) {
         else {
           //Show byte
           addToTerminal( nByte,'#termRX');
+          collectRxPacketFilterData(uint8View[i],nByte);
         }
         
       }
@@ -540,6 +558,8 @@ function updateRXoutput(uint8View) {
         
         //use to string to show the value in hex (that is the way it is entered on the UI)
         if(hexStringToByte(document.querySelector('#rxFormateOptionBeforeByte').value.toLowerCase()) === uint8View[i]) {
+          
+          processRxPacketFilterData();
           
           //Before Byte, so we show the \n first
         
@@ -550,12 +570,14 @@ function updateRXoutput(uint8View) {
             + getRowIdentifierText(0,true) 
             + nByte,'#termRX');
           
-          processRxPacketFilterData();
+          collectRxPacketFilterData(uint8View[i],nByte);
+          
           
         }
         else {
           //Show byte
           addToTerminal(nByte,'#termRX');
+          collectRxPacketFilterData(uint8View[i],nByte);
         }
         
       }
@@ -572,15 +594,21 @@ function updateRXoutput(uint8View) {
         
         if(timeBetweenBytes > document.querySelector('#rxFormateOptionAfterTime').value) {
           
+          processRxPacketFilterData();
+          
           addToTerminal("\n"
               + getRowIdentifierText(0,true)
               + nByte ,'#termRX');
           
-          processRxPacketFilterData();
+          collectRxPacketFilterData(uint8View[i],nByte);
+          
+          
         }
         else {
           
           addToTerminal(nByte,'#termRX');
+          
+          collectRxPacketFilterData(uint8View[i],nByte);
         }
         
       }
@@ -592,16 +620,20 @@ function updateRXoutput(uint8View) {
         if(rxFilterXNumberOfBytesCount >= document.querySelector('#rxFormateOptionAfterBytes').value
         || rxFilterXNumberOfBytesCount === 0 ) {
           
+          processRxPacketFilterData();
+          
           addToTerminal( "\n"
             + getRowIdentifierText(0,true)
             + nByte,'#termRX');
           
+          collectRxPacketFilterData(uint8View[i],nByte);
+          
           rxFilterXNumberOfBytesCount = 0;//zero the counter
-            
-          processRxPacketFilterData();
+ 
         }
         else {
           addToTerminal(nByte,'#termRX');
+          collectRxPacketFilterData(uint8View[i],nByte);
         }
         
         rxFilterXNumberOfBytesCount++;
@@ -967,7 +999,8 @@ function initNumberLines() {
   
   document.querySelector('#termRXNumberLine').value = ""; // clear
   document.querySelector('#termTXNumberLine').value = ""; // clear
-  
+  document.querySelector('#termRXProtocolNumberLine').value = ""; // clear
+  document.querySelector('#termRXFilterNumberLine').value = ""; // clear
 
   var cols = parseInt(document.getElementById('termInput').cols);
 
@@ -980,6 +1013,8 @@ function initNumberLines() {
   for(i=0;i<startPadding;i++){
     document.querySelector('#termRXNumberLine').value += " "; 
     document.querySelector('#termTXNumberLine').value += " "; 
+    document.querySelector('#termRXProtocolNumberLine').value += " "; 
+    document.querySelector('#termRXFilterNumberLine').value += " "; 
   }
 
   for(i=startVal;i<(startVal+cols);i++){
@@ -990,6 +1025,8 @@ function initNumberLines() {
     
     document.querySelector('#termRXNumberLine').value += ""+numberFormattedPadded; 
     document.querySelector('#termTXNumberLine').value += ""+numberFormattedPadded; 
+    document.querySelector('#termRXProtocolNumberLine').value += ""+numberFormattedPadded; 
+    document.querySelector('#termRXFilterNumberLine').value += ""+numberFormattedPadded; 
     
   }
   
@@ -1002,6 +1039,8 @@ function updateAllTerminalFontSettings(){
   document.querySelector('#termRX').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXNumberLine').style.fontSize = currentFontSize+"px";
   document.querySelector('#termTXNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXProtocolNumberLine').style.fontSize = currentFontSize+"px";
+  document.querySelector('#termRXFilterNumberLine').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXFilter').style.fontSize = currentFontSize+"px";
     
