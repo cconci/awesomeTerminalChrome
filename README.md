@@ -7,3 +7,9 @@ https://chrome.google.com/webstore/detail/awesome-terminal/kleldcepbkgbdfacicjce
 project homepage,
 http://cconci.github.io/awesomeTerminalChrome/
 
+Running Aterm with NW js, 
+https://nwjs.io/
+
+From the directory where nw.js has been installed, run 'nw' with the location to the program folder as the running parameter
+e.g. (I have mine in my home directory under projects->aTermChrome)
+./nw ../../../projects/aTermChrome/

@@ -490,6 +490,13 @@ document.querySelector('#showNumberLines').onclick = function() {
   
 };
 
+document.querySelector('#logToFile').onclick = function() {
+
+  //Select the DIR for logging to file, this also starts the logging feature
+  chrome.fileSystem.chooseEntry({type: "openDirectory"}, chromeFileSystemChooseEntryCallBack);
+
+}
+
 //
 document.querySelector('#numberLineStartVal').onchange = function() {
 

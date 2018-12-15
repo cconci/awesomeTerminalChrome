@@ -34,6 +34,16 @@ var rxPacketFilterCount = 0
 var rxPacketFilterCollectedData = [];
 var rxPacketFilterCollectedDataPntr = 0;
 var rxPacketFilterCollectedDataOutPutStr = "";
+
+var windowID = 0;
+
+//File IO for logging
+var GLOBALFileAccess = null;
+var txTermDataDumpToFileBuffer = "";
+var rxTermDataDumpToFileBuffer = "";
+var protoTermDataDumpToFileBuffer = "";
+var filterTermDataDumpToFileBuffer = "";
+
 /*
 List all ports into drop down box on main page 
 */
@@ -55,7 +65,7 @@ window.onload = function() {
   
   updateStatsCounters();
   
- updateAllTerminalFontSettings();
+  updateAllTerminalFontSettings();
   
   
   //Set default to somthing common
@@ -63,9 +73,10 @@ window.onload = function() {
  
   initNumberLines();
   
-  //chrome.runtime.onSuspend.addListener(extensionOnClose);
-  
 };
+
+
+
 function extensionOnClose() {
   
   disconnectFromPort();
@@ -75,6 +86,7 @@ function extensionOnClose() {
 
 function windowBoundsChanged() {
   console.log("Windows bounds have changed");
+  
 }
 
 function addOnReciveListener()
@@ -212,6 +224,7 @@ function openConnectionPeriodicChecks() {
   //
   getControlLinesStatus();
   
+  writeLogsToFile();
   
   //check again...soon
   if(periodicUpdateStarted === true) {
@@ -369,7 +382,7 @@ function serialSendCallBack(sendInfo) {
   try {
     console.log('serialSendCallBack() : Write');
     console.log('serialSendCallBack() : Bytes Sent:'+sendInfo.bytesSent);
-    console.log('serialSendCallBack() : Error Stats:'+sendInfo.error);
+    //console.log('serialSendCallBack() : Error Stats:'+sendInfo.error);
   } catch(e) {
     //Error
     console.log("sendData() - ERROR");
@@ -480,7 +493,7 @@ function processRxPacketFilterData() {
 }
 
 function updateRXoutput(uint8View) {
-  
+
   if(document.querySelector('#rxFormateOptionSelected').checked === true) {
     
     /*
@@ -511,7 +524,7 @@ function updateRXoutput(uint8View) {
             {
               addToTerminal( retStr,'#termRXProtocol');
               addToTerminal( "\n",'#termRXProtocol');
-              
+
               //Auto Scroll
               var ta = document.getElementById('termRXProtocol');
               ta.scrollTop = ta.scrollHeight;
@@ -528,7 +541,7 @@ function updateRXoutput(uint8View) {
       
         if(rxFilterShowDate === 1) {
           addToTerminal(getRowIdentifierText(0,true),'#termRX');
-          
+
           rxFilterShowDate = 0; //clear
         }
         
@@ -541,7 +554,7 @@ function updateRXoutput(uint8View) {
           
           //show byte and put \n
           addToTerminal("\n",'#termRX');
-          
+
           processRxPacketFilterData();
             
           rxFilterShowDate = 1;
@@ -551,6 +564,7 @@ function updateRXoutput(uint8View) {
           //Show byte
           addToTerminal( nByte,'#termRX');
           collectRxPacketFilterData(uint8View[i],nByte);
+
         }
         
       }
@@ -571,8 +585,7 @@ function updateRXoutput(uint8View) {
             + nByte,'#termRX');
           
           collectRxPacketFilterData(uint8View[i],nByte);
-          
-          
+                    
         }
         else {
           //Show byte
@@ -602,13 +615,13 @@ function updateRXoutput(uint8View) {
           
           collectRxPacketFilterData(uint8View[i],nByte);
           
-          
         }
         else {
           
           addToTerminal(nByte,'#termRX');
           
           collectRxPacketFilterData(uint8View[i],nByte);
+
         }
         
       }
@@ -628,12 +641,12 @@ function updateRXoutput(uint8View) {
           
           collectRxPacketFilterData(uint8View[i],nByte);
           
-          rxFilterXNumberOfBytesCount = 0;//zero the counter
- 
+          rxFilterXNumberOfBytesCount = 0;//zero the counter 
         }
         else {
           addToTerminal(nByte,'#termRX');
           collectRxPacketFilterData(uint8View[i],nByte);
+
         }
         
         rxFilterXNumberOfBytesCount++;
@@ -642,6 +655,7 @@ function updateRXoutput(uint8View) {
       else {
         //normal
         addToTerminal(nByte,'#termRX');
+
       }
     }
     
@@ -650,8 +664,9 @@ function updateRXoutput(uint8View) {
   
     //just add to the output window
     addToTerminal(arrayElementsToString(uint8View),'#termRX');
+
   }
-  
+
   autoScrollRxWindow();
 }
 
@@ -965,9 +980,11 @@ function txUserInput() {
     
     
     sendData(byteBuffer);
-    
+
+    var dataForTerm = getRowIdentifierText(1,true) + arrayElementsToString(new Uint8Array(byteBuffer)) +"\n";
+
     //row Identifier
-    addToTerminal(getRowIdentifierText(1,true) + arrayElementsToString(new Uint8Array(byteBuffer)) +"\n",'#termTX');
+    addToTerminal(dataForTerm,'#termTX');
     
     //auto scroll
     var ta = document.getElementById('termTX');
@@ -986,13 +1003,30 @@ function addToTerminal(textToAdd,terminal) {
   maxText = document.querySelector('#terminalMaxBytes').value;
   
   //we cut out the earliest data
-  if(currentText.length > maxText)
-  {
+  if(currentText.length > maxText){
     currentText = currentText.substr(currentText.length - maxText);
   }
   
   document.querySelector(terminal).value = currentText;
   
+  //File logging update buffers (periodically written out)
+  switch(terminal){
+
+    case '#termRX':
+      rxTermDataDumpToFileBuffer += textToAdd;
+      break;
+    case '#termRXFilter':
+      filterTermDataDumpToFileBuffer += textToAdd;
+      break;
+    case '#termRXProtocol':
+      protoTermDataDumpToFileBuffer += textToAdd;
+      break;
+    case '#termTX':
+      txTermDataDumpToFileBuffer += textToAdd;
+      break;
+
+  }
+
 }
 
 function initNumberLines() {
@@ -1044,4 +1078,84 @@ function updateAllTerminalFontSettings(){
   document.querySelector('#termRXProtocol').style.fontSize = currentFontSize+"px";
   document.querySelector('#termRXFilter').style.fontSize = currentFontSize+"px";
     
+}
+
+//File Output
+
+function writeLogsToFile(){
+
+  if(GLOBALFileAccess != null){
+    createFileInDirEntry(GLOBALFileAccess,txTermDataDumpToFileBuffer,"termTX");
+    createFileInDirEntry(GLOBALFileAccess,rxTermDataDumpToFileBuffer,"termRX");
+    createFileInDirEntry(GLOBALFileAccess,protoTermDataDumpToFileBuffer,"termRXProtocol");
+    createFileInDirEntry(GLOBALFileAccess,filterTermDataDumpToFileBuffer,"termRXFilter");
+
+    //clear
+    txTermDataDumpToFileBuffer = "";
+    rxTermDataDumpToFileBuffer = "";
+    protoTermDataDumpToFileBuffer = "";
+    filterTermDataDumpToFileBuffer = "";
+  }
+}
+
+function chromeFileSystemChooseEntryCallBack(entry){
+  chrome.fileSystem.getDisplayPath(entry, chromeFileSystemGetDisplayPathCallback)
+  
+  //wrie a file with the entry
+  
+  GLOBALFileAccess = entry;
+  
+  //FIle test
+  //createFileInDirEntry(entry,"lineOfText","TerminalX");
+}
+
+function chromeFileSystemGetDisplayPathCallback(displayPath){
+  
+  //logToFilePath
+  
+  document.querySelector('#logToFilePath').style.display = "";
+  document.querySelector('#logToFilePath').style.color = "blue";
+  document.querySelector('#logToFilePath').innerHTML = displayPath;
+   
+
+  
+}
+
+function createFileInDirEntry(entry, textToAddToFile,fileStrId) {
+  //Tip.
+  //<https://stackoverflow.com/questions/38796878/create-file-within-in-the-user-selected-directory-using-chrome-filesystem>
+  //
+  var date = new Date();
+  
+  var comId = (document.querySelector('#portList').value).replace(/\//g,"");
+  
+  var fileName = "aTermLog_"
+        +""+ padStringLeft((date.getFullYear()) +"" ,4,"0") 
+        +""+ padStringLeft((date.getMonth() + 1)  +"" ,2,"0") 
+        +""+ padStringLeft( date.getDate()        +"" ,2,"0")
+        +"_"+comId+"_"
+        +"_"+windowID+"_"
+        +"_"+fileStrId+"_"
+        +".txt"; 
+  
+  console.log("createFileInDirEntry() -"+fileName);
+
+
+  entry.getFile(fileName, {create: true}, function(file,text) {
+        file.createWriter(function(writer,text) {
+            writer.seek(writer.length); //Append to end of file
+            writer.write(new Blob([textToAddToFile], { type: "text/plain" })); // async
+            writer.onwrite = function(e) {
+                writer.onwrite = null;
+
+                console.log("File Action");
+
+            };
+        }, function(err) {
+            console.log("Error:"+err.code);
+        });
+    }, function(err) {
+        console.log("Error:"+err.code); //permission error in most cases check the manifest 
+    });
+
 }
