@@ -249,3 +249,18 @@ function hexStringToByteArray(hexString) {
   
   return byteBuffer;
 }
+
+function asciiStringToByteArray(asciiString){
+
+  var byteBuffer = new ArrayBuffer(asciiString.length);
+  //can not edit the ArrayBuffer, need to go through this method
+  var byteBufferView   = new Int8Array(byteBuffer);
+  
+  for(i=0;i<asciiString.length;i++) {
+    var byte = asciiString.charCodeAt(i);
+
+    byteBufferView[i] = byte;
+  }
+
+  return byteBuffer;
+}

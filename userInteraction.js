@@ -127,6 +127,19 @@ document.querySelector('#buttonTXOptions').onclick = function() {
     
 };
 
+document.querySelector('#buttonUserInputOptions').onclick = function() {
+    
+  //
+  if(document.querySelector('#divUserInputOptions').style.display === "") {
+    document.querySelector('#divUserInputOptions').style.display = "none";
+  }
+  else {
+    document.querySelector('#divUserInputOptions').style.display = "";
+    //change button text to hide advanced options etc...
+  }
+    
+};
+
 //
 document.querySelector('#buttonTXPacketFormattingOptions').onclick = function() {
     

@@ -136,9 +136,19 @@
     <span class="customeHeadings">User Input</span>
     <button id="buttonUserInputHide" type="button" style="float: right;" >hide</button>
   </p>
-  
+  <button id="buttonUserInputOptions" type="button" >User Input Options</button>
   <div id="divUserInputSection" style="">
-  
+    <div id="divUserInputOptions" style="display: none;">
+      <hr>
+      <p>Input Format:
+      <select class = "rxOption" id="userInputFormatList">
+            <option value="Hex">Hex</option>
+            <option value="ASCII">ASCII</option>
+            <!--<option value="Decimal">Decimal</option> -->
+          </select> 
+      </p>
+      <hr>
+    </div>
     <p>
       <textarea title="
 Enter data as a hex byte separated by a single space,

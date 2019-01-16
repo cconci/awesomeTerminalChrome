@@ -854,90 +854,82 @@ function txUserInput() {
     //convert the data in the termInput into a byteBuffer
     var byteBuffer; 
     
-    //check if the user input is Multi line
-    if((document.querySelector('#termInput').value).includes("\n"))
-    {
-      console.log("User entered Multi Line input");
-     
-      txAutomateActive = true;
-      
-      //get the current Row
-      var splitTxEntry = (document.querySelector('#termInput').value).split('\n');
-      
-      if(txAutomateCurrentRow >= splitTxEntry.length)
+    var inputFormatSelection = document.querySelector('#userInputFormatList').selectedIndex;
+
+    if(inputFormatSelection === 0){
+
+      //Hex Input
+
+      //check if the user input is Multi line
+      if((document.querySelector('#termInput').value).includes("\n"))
       {
-        //we are done
-        txAutomateActive = false;
-        txAutomateCurrentRow = 0;
-        
-        runAutomateCheck = true;
-      }
-      else
-      {
-        
-        var nextTxTimeMS = 1000;
-        //Does the row have a pre set time? (look for the |)
-        if(splitTxEntry[txAutomateCurrentRow].includes("|"))
+        console.log("User entered Multi Line input");
+      
+        txAutomateActive = true;
+      
+        //get the current Row
+        var splitTxEntry = (document.querySelector('#termInput').value).split('\n');
+      
+        if(txAutomateCurrentRow >= splitTxEntry.length)
         {
-          //mark up for custome timing detected   '| X''    
-          var splitTxEntryWithTiming = splitTxEntry[txAutomateCurrentRow].split('|');
-          
-          //set buffer to send with timing options stripped
-          byteBuffer = hexStringToByteArray(splitTxEntryWithTiming[0]); //set the data
-          
-          nextTxTimeMS = splitTxEntryWithTiming[1]; //set the timing
-          
+          //we are done
+          txAutomateActive = false;
+          txAutomateCurrentRow = 0;
+        
+          runAutomateCheck = true;
         }
         else
         {
-          //set buffer to send
-          byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
-          
-          //use global setting
-          nextTxTimeMS = document.querySelector('#txInputMultiLinRowGapXms').value;
-        }
         
-        txAutomateCurrentRow++;//next row
-        
-        //callback with param
-        setTimeoutID = setTimeout(
-          function() {txUserInputInit(1);}, 
-          nextTxTimeMS);
+          var nextTxTimeMS = 1000;
+          //Does the row have a pre set time? (look for the |)
+          if(splitTxEntry[txAutomateCurrentRow].includes("|"))
+          {
+            //mark up for custome timing detected   '| X''    
+            var splitTxEntryWithTiming = splitTxEntry[txAutomateCurrentRow].split('|');
           
-        automateSetTimeoutIDs.push(setTimeoutID);
-        
-      }
-      
-      
-    }
-    else
-    {
-      
-      //normal
-      byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
-     
-      runAutomateCheck = true; 
-    }
-    
-    if(runAutomateCheck === true){
-      //check if any of the repeat options are on,
-      if(document.querySelector('#txFormateOptionSelected').checked === true) {
-        
-        if(  document.querySelector('#txInputEveryXmsRB').checked === true) {
+            //set buffer to send with timing options stripped
+            byteBuffer = hexStringToByteArray(splitTxEntryWithTiming[0]); //set the data
           
-          //automate is on
-          txAutomateActive = true;
+            nextTxTimeMS = splitTxEntryWithTiming[1]; //set the timing
           
-          //start count down till next tx
+          }
+          else
+          {
+            //set buffer to send
+            byteBuffer = hexStringToByteArray(splitTxEntry[txAutomateCurrentRow]);
+          
+            //use global setting
+            nextTxTimeMS = document.querySelector('#txInputMultiLinRowGapXms').value;
+          }
+        
+          txAutomateCurrentRow++;//next row
+        
+          //callback with param
           setTimeoutID = setTimeout(
-            function() { txUserInputInit(1);}, 
-            document.querySelector('#txInputEveryXms').value);
-            
+            function() {txUserInputInit(1);}, 
+            nextTxTimeMS);
+          
           automateSetTimeoutIDs.push(setTimeoutID);
-        }
-        else if(document.querySelector('#txInputXtimesRB').checked === true) {
         
-          if(txAutomateCount < document.querySelector('#txInputXtimes').value) {
+        }
+      
+      
+      }
+      else
+      {
+      
+        //normal
+        byteBuffer = hexStringToByteArray((document.querySelector('#termInput').value));
+     
+        runAutomateCheck = true; 
+      }
+    
+      if(runAutomateCheck === true){
+        //check if any of the repeat options are on,
+        if(document.querySelector('#txFormateOptionSelected').checked === true) {
+        
+          if(  document.querySelector('#txInputEveryXmsRB').checked === true) {
           
             //automate is on
             txAutomateActive = true;
@@ -948,18 +940,38 @@ function txUserInput() {
               document.querySelector('#txInputEveryXms').value);
             
             automateSetTimeoutIDs.push(setTimeoutID);
-            
-            txAutomateCount++;
-          
           }
-          else {
-            txAutomateCount = 0;
-            txAutomateActive = false;
+          else if(document.querySelector('#txInputXtimesRB').checked === true) {
+        
+            if(txAutomateCount < document.querySelector('#txInputXtimes').value) {
+          
+              //automate is on
+              txAutomateActive = true;
+          
+              //start count down till next tx
+              setTimeoutID = setTimeout(
+                function() { txUserInputInit(1);}, 
+                document.querySelector('#txInputEveryXms').value);
             
-            return;
+              automateSetTimeoutIDs.push(setTimeoutID);
+            
+              txAutomateCount++;
+          
+            }
+            else {
+              txAutomateCount = 0;
+              txAutomateActive = false;
+            
+              return;
+            }
           }
         }
       }
+    }
+    else if(inputFormatSelection === 1){
+      
+      //ASCII Input
+      byteBuffer = asciiStringToByteArray(document.querySelector('#termInput').value);
     }
     
     /*
