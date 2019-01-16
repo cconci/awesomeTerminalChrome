@@ -1141,6 +1141,8 @@ function createFileInDirEntry(entry, textToAddToFile,fileStrId) {
   
   var comId = (document.querySelector('#portList').value).replace(/\//g,"");
   
+  var windowID = document.querySelector('#windowNickName').value;
+
   var fileName = "aTermLog_"
         +""+ padStringLeft((date.getFullYear()) +"" ,4,"0") 
         +""+ padStringLeft((date.getMonth() + 1)  +"" ,2,"0") 
