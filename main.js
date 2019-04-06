@@ -978,6 +978,25 @@ function txUserInput() {
     Check to see if any of the Packet Formatting options are active
     */
     
+    //checksum or CRC items
+    var checksumSelection = document.querySelector('#txPacketFormatChecksumOrCRCList').value;
+
+    var calculationStartOffset = document.querySelector('#txPacketFormatChecksumOrCRCBufferOffset').value;
+
+    switch(checksumSelection)
+    {
+      case "Checksum Parity":
+
+        byteBuffer = appendByteToBuffer(byteBuffer,checksumParityCalculate(byteBuffer,calculationStartOffset));
+        
+        break;
+      default:
+      case "None":
+        break;
+    }
+
+    //Protocol items
+
     var protcolSelection = document.querySelector('#txPacketFormatProtocolList').value;
     
     switch(protcolSelection)

@@ -227,15 +227,20 @@ Enter ?+ to place an incrementing byte
     </div>
     <!--header Footer, Protocol Options etc -->
     <div id="divTXPacketFormattingOptions" style="display: none;">
+      <h3>Add Checksum or CRC to the end of the TX frame,</h3>
       <p>
-        Append Checksum or CRC
+        -Checksum or CRC
         <select class = "rxOption" id="txPacketFormatChecksumOrCRCList">
           <option value="None">None</option>
-          
+          <option value="Checksum Parity">Checksum Parity</option>
         </select>
       </p>
+      <p> - Packet Offset before calculation start (DEC): 
+        <input class = "rxOption"             id ="txPacketFormatChecksumOrCRCBufferOffset"  title="e.g. enter '2' and the checksum calculation starts from index '2' of the TX data" type="text" maxlength="6" size="4" value="0">
+      </p>
+      <h3>Apply Packet Protocol TX frame,</h3>
       <p>
-        Apply Packet Protocol
+        -Protocol
         <select class = "rxOption" id="txPacketFormatProtocolList">
           <option value="None">None</option>
           <option value="Custom 1">Custom 1</option>
@@ -393,6 +398,8 @@ Enter ?+ to place an incrementing byte
   <script type="text/javascript" src="userInteraction.js"></script>
   <script type="text/javascript" src="stringFxn.js"></script>
   <script type="text/javascript" src="protocolRoutineCustom.js"></script>
+  <script type="text/javascript" src="checksumParity.js"></script>
+  <script type="text/javascript" src="bufferFxn.js"></script>
   
   
 <ol id="demo"></ol>
@@ -400,6 +407,7 @@ Enter ?+ to place an incrementing byte
 <footer>
   <hr>
   <h4 id="footer">Awesome Terminal</h4>
+  <h4 id="footer">Who To Blame: cconci</h4>
 </footer>
 
 </body>
