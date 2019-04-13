@@ -616,3 +616,285 @@ function ui_update_rxFilterOptionSelected(){
     document.querySelector('#divRXFilterSection').style.display = "none";
   }  
 }
+
+/*************************************************************************************************
+Colour Items
+*************************************************************************************************/
+
+document.querySelector('#colourMainText').onchange = function() {
+
+  var newColour = document.querySelector('#colourMainText').value;
+
+  console.log("colourMainText - onchange():"+newColour);
+
+  var elements = document.getElementsByTagName("h1");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+  var elements = document.getElementsByTagName("h4");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+  var elements = document.getElementsByTagName("h3");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+  var elements = document.getElementsByTagName("div");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+  var elements = document.getElementsByTagName("p");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+  var elements = document.getElementsByTagName("customeHeadings");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+};
+
+document.querySelector('#colourMainBG').onchange = function() {
+
+  var newColour = document.querySelector('#colourMainBG').value;
+
+  var elements = document.getElementsByTagName("body");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.background = newColour;
+  }
+
+
+  var elements = document.getElementsByTagName("html");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.background = newColour;
+  }
+
+};
+
+//colourDataWindowBG
+document.querySelector('#colourDataWindowBG').onchange = function() {
+
+  var newColour = document.querySelector('#colourDataWindowBG').value;
+
+  var elements = document.getElementsByTagName("textarea");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.background = newColour;
+  }
+
+  //input
+
+  var elements = document.getElementsByTagName("input");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.background = newColour;
+  }
+
+};
+
+//colourDataWindowText
+document.querySelector('#colourDataWindowText').onchange = function() {
+
+  var newColour = document.querySelector('#colourDataWindowText').value;
+
+  var elements = document.getElementsByTagName("textarea");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+  var elements = document.getElementsByTagName("input");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+};
+
+//colourButtonsBG
+document.querySelector('#colourButtonsBG').onchange = function() {
+
+  var newColour = document.querySelector('#colourButtonsBG').value;
+
+  var elements = document.getElementsByTagName("button");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.background = newColour;
+  }
+
+
+};
+
+//colourButtonsText
+document.querySelector('#colourButtonsText').onchange = function() {
+
+  var newColour = document.querySelector('#colourButtonsText').value;
+
+  var elements = document.getElementsByTagName("button");
+
+  for(var i = 0; i < elements.length; i++) {
+    
+    elements[i].style.color = newColour;
+  }
+
+};
+
+document.querySelector('#themesList').onchange = function() {
+  
+
+  var selectedOption = document.querySelector('#themesList').value;
+
+  switch(selectedOption)
+  {
+    case "Matrix Boy":
+    
+      document.querySelector('#colourMainBG').value = "#000000";
+      document.querySelector('#colourMainBG').onchange();
+
+      document.querySelector('#colourMainText').value = "#41e799";
+      document.querySelector('#colourMainText').onchange();
+    
+      document.querySelector('#colourDataWindowBG').value = "#000000";
+      document.querySelector('#colourDataWindowBG').onchange();
+
+      document.querySelector('#colourDataWindowText').value = "#41e799";
+      document.querySelector('#colourDataWindowText').onchange();
+
+      document.querySelector('#colourButtonsBG').value = "#444444";
+      document.querySelector('#colourButtonsBG').onchange();
+
+      document.querySelector('#colourButtonsText').value = "#41e799";
+      document.querySelector('#colourButtonsText').onchange();
+
+      break;
+    default:
+
+      document.querySelector('#colourMainBG').value = "#FFFFFF";
+      document.querySelector('#colourMainBG').onchange();
+
+      document.querySelector('#colourMainText').value = "#000000";
+      document.querySelector('#colourMainText').onchange();
+    
+      document.querySelector('#colourDataWindowBG').value = "#FFFFFF";
+      document.querySelector('#colourDataWindowBG').onchange();
+
+      document.querySelector('#colourDataWindowText').value = "#000000";
+      document.querySelector('#colourDataWindowText').onchange();
+
+      document.querySelector('#colourButtonsBG').value = "#000000";
+      document.querySelector('#colourButtonsBG').onchange();
+
+      document.querySelector('#colourButtonsText').value = "#FFFFFF";
+      document.querySelector('#colourButtonsText').onchange();
+
+      /*
+      //Debug display defaults
+      var elements = document.getElementsByTagName("button");
+
+      for(var i = 0; i < elements.length; i++) {
+        
+        
+        console.log("button - colour:"+elements[i].style.color+"\n");
+        console.log("button - colour bg:"+elements[i].style.background+"\n");
+      }
+
+      var elements = document.getElementsByTagName("textarea");
+
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("textarea - colour:"+elements[i].style.color+"\n");
+        console.log("textarea - colour bg:"+elements[i].style.background+"\n");
+      }
+    
+      var elements = document.getElementsByTagName("input");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("input - colour:"+elements[i].style.color+"\n");
+        console.log("input - colour bg:"+elements[i].style.background+"\n");
+      }
+
+      var elements = document.getElementsByTagName("body");
+
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("body - colour:"+elements[i].style.background+"\n");
+      }
+    
+    
+      var elements = document.getElementsByTagName("html");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("html - colour:"+elements[i].style.background+"\n");
+      }
+      var elements = document.getElementsByTagName("h1");
+
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("h1 - colour:"+elements[i].style.color+"\n");
+      }
+    
+      var elements = document.getElementsByTagName("h4");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("h4 - colour:"+elements[i].style.color+"\n");
+      }
+    
+      var elements = document.getElementsByTagName("h3");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("h3 - colour:"+elements[i].style.color+"\n");
+      }
+    
+      var elements = document.getElementsByTagName("div");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("div - colour:"+elements[i].style.color+"\n");
+      }
+    
+      var elements = document.getElementsByTagName("p");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("p - colour:"+elements[i].style.color+"\n");
+      }
+    
+      var elements = document.getElementsByTagName("customeHeadings");
+    
+      for(var i = 0; i < elements.length; i++) {
+        
+        console.log("customeHeadings - colour:"+elements[i].style.color+"\n");
+      }
+      */
+      break;
+  }
+
+};

@@ -9,7 +9,9 @@
   <!-- ############################################################## -->
   <p>
     <h1 id="heading">Awesome Terminal</h1>
-    <span class="customeHeadings">Port Settings</span>
+    <p>
+      <span class="customeHeadings">Port Settings</span>
+    </p>
     <button id="buttonHeaderHide" type="button" style="float: right;" >hide</button>
   </p>
   <div id="divHeaderSection" style="">
@@ -108,6 +110,32 @@
         Log To File: <input class = "rxOption" type="checkbox" id="logToFile" name="logToFile" value="x">
         <span class = "optionTimeExample" style="display: none;" id="logToFilePath"></span>
       </p>
+      <h3>Colour/Skin options</h3>
+      <p>
+        Main Background : <input type="color" class = "rxOption" id="colourMainBG" name="colourMainBG" value="#FFFFFF">
+      </p>
+      <p>
+        Main Text : <input type="color" class = "rxOption" id="colourMainText" name="colourMainText" value="#000000">
+      </p>
+      <p>
+        Data Window Background : <input type="color" class = "rxOption" id="colourDataWindowBG" name="colourDataWindowBG" value="#FFFFFF">
+      </p>
+      <p>
+        Data Window Text : <input type="color" class = "rxOption" id="colourDataWindowText" name="colourDataWindowText" value="#000000">
+      </p>
+      <p>
+        Buttons Background : <input type="color" class = "rxOption" id="colourButtonsBG" name="colourButtonsBG" value="#000000"> 
+      </p>
+      <p>
+        Buttons Text : <input type="color" class = "rxOption" id="colourButtonsText" name="colourButtonsText" value="#FFFFFF"> 
+      </p>
+      <p>Themes:
+        <select class = "rxOption" id="themesList">
+              <option value="Default">Default</option>
+              <option value="Matrix Boy">Matrix Boy</option>
+            </select> 
+        </p>   
+      
       <hr>
     </div>
         <div id="divStatistics" style="display: none;">
@@ -402,13 +430,13 @@ Enter ?+ to place an incrementing byte
   <script type="text/javascript" src="bufferFxn.js"></script>
   
   
-<ol id="demo"></ol>
+  <ol id="demo"></ol>
 
-<footer>
-  <hr>
-  <h4 id="footer">Awesome Terminal</h4>
-  <h4 id="footer">Who To Blame: cconci</h4>
-</footer>
+  <footer>
+    <hr>
+    <h4 id="footer">Awesome Terminal</h4>
+    <h4 id="footer">Who To Blame: cconci</h4>
+  </footer>
 
 </body>
 

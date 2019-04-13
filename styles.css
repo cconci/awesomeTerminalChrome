@@ -66,4 +66,20 @@ http://stackoverflow.com/questions/21979994/chrome-app-cannot-be-scroll
 */
 html, body {
     overflow-y: visible;
+    background: #FFFFFF;
+}
+
+body {
+  color: #000000;
+  
+}
+h1 {
+  color: #000000;
+}
+p {
+  color: rgb(0,0,0)
+}
+
+textarea {
+
 }
