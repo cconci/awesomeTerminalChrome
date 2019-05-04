@@ -1160,6 +1160,10 @@ function createFileInDirEntry(entry, textToAddToFile,fileStrId) {
   
   var comId = (document.querySelector('#portList').value).replace(/\//g,"");
   
+  comId = comId.replace(/\./g,"");		//replace full stops
+  comId = comId.replace(/\\/g,"");		//replace FWD Slash
+  
+  
   var windowID = document.querySelector('#windowNickName').value;
 
   var fileName = "aTermLog_"
