@@ -848,6 +848,7 @@ function txUserInput() {
   //Kill any setTimout calls from automate, otherwise there will be a list of expired setTimeout IDs
   clearAutomateSetTimeoutCalls();
   
+  
   //add text in the user input as a row in the output
   if( (document.querySelector('#termInput').value).length > 0) {
     
@@ -1009,7 +1010,21 @@ function txUserInput() {
         break;
     }
     
+    //Add Pre
+    if((document.querySelector('#termPreInput').value).length > 0){
+      preByteBuffer = hexStringToByteArray(document.querySelector('#termPreInput').value);
+      byteBuffer = appendBufferToBufferStart(byteBuffer,preByteBuffer);
+    }
+
+    //Add Post
+    if((document.querySelector('#termPostInput').value).length > 0){
+      postByteBuffer = hexStringToByteArray(document.querySelector('#termPostInput').value);
+      byteBuffer = appendBufferToBufferEnd(byteBuffer,postByteBuffer);
+    }
     
+    //
+    //Send
+    //
     sendData(byteBuffer);
 
     var dataForTerm = getRowIdentifierText(1,true) + arrayElementsToString(new Uint8Array(byteBuffer)) +"\n";
