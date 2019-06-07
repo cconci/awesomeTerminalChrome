@@ -698,6 +698,9 @@ function getByteInUserSelectedFormat(rxByte){
     case "ASCII_3":
       retVar = arrayElementToAsciiString(rxByte,3);
       break;
+    case "ASCII_4":
+      retVar = arrayElementToAsciiString(rxByte,4);
+      break;
     case "Hex":
       retVar = arrayElementToHexString(rxByte);
       break;

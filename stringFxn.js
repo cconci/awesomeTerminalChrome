@@ -113,14 +113,8 @@ function arrayElementToAsciiString(arrayElement,showSpecialChars) {
     "US",
   ];
   
-    
-    
-    
-    
-    
-    
-    
-    var specialCharsCode = [
+
+  var specialCharsCode = [
     "",
     "",
     "",
@@ -157,15 +151,16 @@ function arrayElementToAsciiString(arrayElement,showSpecialChars) {
 
 
   if(showSpecialChars === 1 && arrayElement <= 31) {
-    
-    return specialCharsSimple[arrayElement];
-    
+    return "["+specialCharsSimple[arrayElement]+"]";
   }
   else if (showSpecialChars === 2 && arrayElement <= 31){
-    return specialCharsDetailed[arrayElement];
+    return "["+specialCharsDetailed[arrayElement]+"]";
   }
   else if (showSpecialChars === 3 && arrayElement <= 31){
     return specialCharsCode[arrayElement];
+  }
+  else if (showSpecialChars === 4 && (arrayElement >= 127 || arrayElement <= 31)){
+    return "<0x"+padStringLeft(arrayElement.toString(16),2,"0")+">";
   }
   
   return padStringLeft(String.fromCharCode(arrayElement.toString()),0,"0")+"";
