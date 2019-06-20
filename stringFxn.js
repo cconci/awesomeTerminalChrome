@@ -35,6 +35,10 @@ function arrayElementToHexString(arrayElement) {
   return padStringLeft(arrayElement.toString(16),2,"0")+" ";
 }
 
+function arrayElementToHexStringUppercase(arrayElement){
+  return (padStringLeft(arrayElement.toString(16),2,"0")+" ").toUpperCase();
+}
+
 function arrayElementToOctalString(arrayElement) {
   return padStringLeft(arrayElement.toString(8),3,"0")+" ";
 }

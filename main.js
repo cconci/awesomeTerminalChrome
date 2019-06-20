@@ -701,8 +701,11 @@ function getByteInUserSelectedFormat(rxByte){
     case "ASCII_4":
       retVar = arrayElementToAsciiString(rxByte,4);
       break;
-    case "Hex":
+    case "Hex_1":
       retVar = arrayElementToHexString(rxByte);
+      break;
+    case "Hex_2":
+      retVar = arrayElementToHexStringUppercase(rxByte);
       break;
     case "Octal":
       retVar = arrayElementToOctalString(rxByte);
@@ -712,6 +715,10 @@ function getByteInUserSelectedFormat(rxByte){
       break;
     case "Decimal":
       retVar = arrayElementToDecimalString(rxByte);
+      break;
+
+    default:
+        console.log("getByteInUserSelectedFormat() - Bad Selection:["+selection+"]");
       break;
     
   }
