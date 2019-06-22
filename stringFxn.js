@@ -10,7 +10,7 @@ function padStringLeft(stringToPad,NumberToPadFor,stringToPadWith) {
   js has not got a string padding fxn?????
   */
 
-  console.log(stringToPad.length +'\n');
+  //console.log(stringToPad.length +'\n');
 
   while(stringToPad.length < NumberToPadFor) {
 
@@ -174,7 +174,7 @@ function arrayElementsToString(arrayData) {
   
   var output = "";
   
-  for(i=0;i<arrayData.byteLength;i++) {
+  for(var i=0;i<arrayData.byteLength;i++) {
     output += padStringLeft(arrayData[i].toString(16),2,"0")+" "; //.toString(16); turns our int to a hex string
     
   }
@@ -217,7 +217,7 @@ function hexStringToByteArray(hexString) {
   //can not edit the ArrayBuffer, need to go through this method
   var byteBufferView   = new Int8Array(byteBuffer);
   
-  for(i=0;i<splitHexString.length;i++) {
+  for(var i=0;i<splitHexString.length;i++) {
     
     //form each byte 
     //http://www.w3schools.com/jsref/jsref_parseint.asp
@@ -242,7 +242,7 @@ function hexStringToByteArray(hexString) {
     
     byteBufferView[i] = byte;
     
-    console.log(byte +'\n');
+    //console.log(byte +'\n');
     
   }
   
@@ -255,7 +255,7 @@ function asciiStringToByteArray(asciiString){
   //can not edit the ArrayBuffer, need to go through this method
   var byteBufferView   = new Int8Array(byteBuffer);
   
-  for(i=0;i<asciiString.length;i++) {
+  for(var i=0;i<asciiString.length;i++) {
     var byte = asciiString.charCodeAt(i);
 
     byteBufferView[i] = byte;

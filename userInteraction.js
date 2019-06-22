@@ -592,6 +592,21 @@ document.querySelector('#divRXOptionsFilterByteValue').onchange = function() {
     ui_update_rxFilterOptionSelected();
 }
 
+document.querySelector('#rxMonitorSelected').onchange = function() {
+
+  ui_update_rxMonitorSelected();
+};
+
+document.querySelector('#divRXOptionsMonitorStartByteIndex').onchange = function() {
+    
+  document.querySelector('#rxMonitorSelected').checked = true;
+  ui_update_rxMonitorSelected();
+}
+document.querySelector('#divRXOptionsMonitorEndByteIndex').onchange = function() {
+    
+  document.querySelector('#rxMonitorSelected').checked = true;
+  ui_update_rxMonitorSelected();
+}
 /*************************************************************************************************
 
 *************************************************************************************************/
@@ -614,6 +629,17 @@ function ui_update_rxFilterOptionSelected(){
   else {
     
     document.querySelector('#divRXFilterSection').style.display = "none";
+  }  
+}
+
+function ui_update_rxMonitorSelected(){
+  if(document.querySelector('#rxMonitorSelected').checked === true) {
+    
+    document.querySelector('#divRXMonitorSection').style.display = "";
+  }
+  else {
+    
+    document.querySelector('#divRXMonitorSection').style.display = "none";
   }  
 }
 

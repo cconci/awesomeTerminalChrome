@@ -9,7 +9,7 @@ function checksumParityCalculate(byteBuffer,calculationStartOffset) {
   
   var checksum =0x00;
   
-  for(i=0;i<(byteBufferView.length);i++) {
+  for(var i=0;i<(byteBufferView.length);i++) {
 
     if(i >= calculationStartOffset){
       var byte = byteBufferView[i];

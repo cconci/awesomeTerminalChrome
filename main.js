@@ -44,6 +44,8 @@ var rxTermDataDumpToFileBuffer = "";
 var protoTermDataDumpToFileBuffer = "";
 var filterTermDataDumpToFileBuffer = "";
 
+var rxMonitorRecordArray = new Array();
+
 /*
 List all ports into drop down box on main page 
 */
@@ -219,7 +221,7 @@ function serialConnectCallback(info) {
 
 function openConnectionPeriodicChecks() {
   
-  console.log('openConnectionPeriodicChecks()');
+  //console.log('openConnectionPeriodicChecks()');
   
   //
   getControlLinesStatus();
@@ -411,15 +413,15 @@ function getControlLinesStatus() {
 function serialGetControlSignalsCallBack(signals) {
   
   try {
-    console.log("serialGetControlSignalsCallBack() - Enter");
+    //console.log("serialGetControlSignalsCallBack() - Enter");
   
-    console.log("serialGetControlSignalsCallBack() - DCD:"+signals.dcd);
-    console.log("serialGetControlSignalsCallBack() - CTS:"+signals.cts);
-    console.log("serialGetControlSignalsCallBack() - RI:"+signals.ri);
-    console.log("serialGetControlSignalsCallBack() - DSR:"+signals.dsr);
+    //console.log("serialGetControlSignalsCallBack() - DCD:"+signals.dcd);
+    //console.log("serialGetControlSignalsCallBack() - CTS:"+signals.cts);
+    //console.log("serialGetControlSignalsCallBack() - RI:"+signals.ri);
+    //console.log("serialGetControlSignalsCallBack() - DSR:"+signals.dsr);
     
   } catch(e) {
-    console.log("serialGetControlSignalsCallBack() - ERROR");
+    //console.log("serialGetControlSignalsCallBack() - ERROR");
     document.querySelector('#portInfo').style.color = "red";
     document.querySelector('#portInfo').innerHTML = "Connection Error, check configuration";        
   }
@@ -462,34 +464,104 @@ function collectRxPacketFilterData(rawByte,outputStr) {
 
 function processRxPacketFilterData() {
 
-    if(document.querySelector('#rxFormateOptionSelected').checked === true) {
-        
-        var indexOfByteToCheck = document.querySelector('#divRXOptionsFilterByteNumber').value;
-        var indexOfByteValueTOLookFor = hexStringToByte(document.querySelector('#divRXOptionsFilterByteValue').value.toLowerCase());
-        
-        //rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++]
-        
-        if(indexOfByteToCheck < rxPacketFilterCollectedDataPntr)
-        {
-            if(indexOfByteValueTOLookFor === rxPacketFilterCollectedData[indexOfByteToCheck])
-            {
-               //Display the Packet in the Filter Packet Window
-               addToTerminal( rxPacketFilterCollectedDataOutPutStr,'#termRXFilter');
-               addToTerminal( "\n",'#termRXFilter');
-
-               //Auto Scroll
-               var ta = document.getElementById('termRXFilter');
-               ta.scrollTop = ta.scrollHeight;
-
-               rxPacketFilterCount++;
-            }
-        }
-        
-        //Reset
-        rxPacketFilterCollectedDataPntr = 0;
-        rxPacketFilterCollectedDataOutPutStr = "";
-    }
+  if(document.querySelector('#rxFormateOptionSelected').checked === true) {
+      
+    var indexOfByteToCheck = document.querySelector('#divRXOptionsFilterByteNumber').value;
+    var indexOfByteValueTOLookFor = hexStringToByte(document.querySelector('#divRXOptionsFilterByteValue').value.toLowerCase());
     
+    //rxPacketFilterCollectedData[rxPacketFilterCollectedDataPntr++]
+    
+    if(indexOfByteToCheck < rxPacketFilterCollectedDataPntr)
+    {
+      if(indexOfByteValueTOLookFor === rxPacketFilterCollectedData[indexOfByteToCheck])
+      {
+        //Display the Packet in the Filter Packet Window
+        addToTerminal( rxPacketFilterCollectedDataOutPutStr,'#termRXFilter');
+        addToTerminal( "\n",'#termRXFilter');
+
+        //Auto Scroll
+        var ta = document.getElementById('termRXFilter');
+        ta.scrollTop = ta.scrollHeight;
+
+        rxPacketFilterCount++;
+
+        }
+      }
+    }
+
+    //is the Monitor On?
+    if(document.querySelector('#rxMonitorSelected').checked === true) {
+
+      //check if current message is in the monitor list, if no add, if yes update entry
+      var messageFound = false;
+      for(var i=0;i<rxMonitorRecordArray.length;i++){
+
+        var matchStartIndex = document.querySelector('#divRXOptionsMonitorStartByteIndex').value;
+        var matchEndIndex = document.querySelector('#divRXOptionsMonitorEndByteIndex').value;
+
+        rxMonitorRecordArray[i].showRecord();
+
+        if(rxMonitorRecordArray[i].matchRecord(rxPacketFilterCollectedData,matchStartIndex,matchEndIndex) === true){
+
+          //console.log("Monitor - update index:"+i+" of "+rxMonitorRecordArray.length);
+
+          rxMonitorRecordArray[i].showRecord();
+
+          rxMonitorRecordArray[i].updateRecord(rxPacketFilterCollectedDataOutPutStr,rxPacketFilterCollectedData);
+          messageFound = true;
+        }
+      }
+
+      if(messageFound === false){
+        
+        //add it
+        rxMonitorRecordArray.push(new RxMonitorRecord(rxPacketFilterCollectedDataOutPutStr,rxPacketFilterCollectedData));
+      }
+
+      //update Monitor VIew
+      updateMonitorView();
+    
+    //Reset
+    rxPacketFilterCollectedDataPntr = 0;
+    rxPacketFilterCollectedDataOutPutStr = "";
+  }
+    
+}
+
+function updateMonitorView() {
+
+  //refresh the rows of 'tableRXMonitor'
+  let tableRef = document.getElementById('tableRXMonitor');
+
+  var numberOfROws = document.getElementById('tableRXMonitor').rows.length;
+
+  while((numberOfROws) < rxMonitorRecordArray.length+1){  //+1 for header
+    let newRow = tableRef.insertRow(-1);
+
+    // Insert a cell in the row at index 0
+    newRow.insertCell(0);
+    newRow.insertCell(1);
+    newRow.insertCell(2);
+    newRow.insertCell(3);
+
+    numberOfROws = document.getElementById('tableRXMonitor').rows.length;
+  }
+
+  var tableRows = document.getElementById('tableRXMonitor').rows;
+
+  //o is the header row
+  for(var i=1;i<rxMonitorRecordArray.length+1;i++){
+    //set details
+    
+    var cells = tableRows[i].cells;
+    //-1 due to header offset
+    cells[0].innerHTML = rxMonitorRecordArray[i-1].getRecordString();
+    cells[1].innerHTML = rxMonitorRecordArray[i-1].getCount();
+    cells[2].innerHTML = rxMonitorRecordArray[i-1].getFrequency();
+    cells[3].innerHTML = rxMonitorRecordArray[i-1].getLastMessageTimeStamp();
+
+  }
+
 }
 
 function updateRXoutput(uint8View) {
@@ -500,7 +572,7 @@ function updateRXoutput(uint8View) {
     What options did the user select?
     */
     
-    for(i=0;i<uint8View.length;i++) { 
+    for(var i=0;i<uint8View.length;i++) { 
     
       var nByte = getByteInUserSelectedFormat(uint8View[i]); 
       
@@ -1100,14 +1172,14 @@ function initNumberLines() {
   
   var valuePadding = parseInt(document.querySelector('#numberLinePaddingVal').value);
 
-  for(i=0;i<startPadding;i++){
+  for(var i=0;i<startPadding;i++){
     document.querySelector('#termRXNumberLine').value += " "; 
     document.querySelector('#termTXNumberLine').value += " "; 
     document.querySelector('#termRXProtocolNumberLine').value += " "; 
     document.querySelector('#termRXFilterNumberLine').value += " "; 
   }
 
-  for(i=startVal;i<(startVal+cols);i++){
+  for(var i=startVal;i<(startVal+cols);i++){
     
     var numberFormatted = padStringLeft(i+'',2,"0");
     

@@ -11,8 +11,8 @@
     <h1 id="heading">Awesome Terminal</h1>
     <p>
       <span class="customeHeadings">Port Settings</span>
+      <button id="buttonHeaderHide" type="button" style="float: right;" >hide</button>
     </p>
-    <button id="buttonHeaderHide" type="button" style="float: right;" >hide</button>
   </p>
   <div id="divHeaderSection" style="">
     <p>
@@ -163,9 +163,9 @@
   <p>
     <span class="customeHeadings">User Input</span>
     <button id="buttonUserInputHide" type="button" style="float: right;" >hide</button>
-  </p>
-  <button id="buttonUserInputOptions" type="button" >User Input Options</button>
+  </p>  
   <div id="divUserInputSection" style="">
+    <button id="buttonUserInputOptions" type="button" >User Input Options</button>
     <div id="divUserInputOptions" style="display: none;">
       <hr>
       <p>Input Format:
@@ -380,6 +380,13 @@ Enter ?+ to place an incrementing byte
             <input class = "" id ="divRXOptionsFilterByteValue" title="a byte value" type="text" name="divRXOptionsFilterByteValue" maxlength="2" size="4">            
           </p>
           Use RX Filter:<input class = "rxOption" type="checkbox" id="rxFilterOptionSelected" name="rxFilterOptionSelected" value="x">
+          <h3> - RX Unique Packet Monitor</h3>
+          <p>  - Monitor Packets based on values in bytes at index,
+            <input class = "" id ="divRXOptionsMonitorStartByteIndex" title="a number (DEC)" type="text" name="divRXOptionsMonitorStartByteIndex" maxlength="3" size="4">
+            to,
+            <input class = "" id ="divRXOptionsMonitorEndByteIndex" title="a number (DEC)" type="text" name="divRXOptionsMonitorEndByteIndex" maxlength="3" size="4">
+          </p>
+          Use RX Monitor:<input class = "rxOption" type="checkbox" id="rxMonitorSelected" name="rxMonitorSelected" value="x">
         </div>
       <hr>
     </div>
@@ -417,7 +424,9 @@ Enter ?+ to place an incrementing byte
   </div>
   <!-- ############################################################## -->
   <div id="divRXFilterSection" style="display: none;">
-    <h3>RX Filter</h3>
+    <p>
+      <span class="customeHeadings">RX Filter</span>
+    </p>
     <span style="float: right;" style="" id="rxStatsFilterCount">RX Packet count: NA</span>
     <p>
       <textarea id ="termRXFilter" rows="4" cols="80" spellcheck="false" disabled></textarea>
@@ -433,8 +442,25 @@ Enter ?+ to place an incrementing byte
     <button id="buttonRXFilterClear" type="button" >Clear</button>
     <button id="buttonRXFilterCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
   </div>
-
-
+  <!-- ############################################################## -->
+  <div id="divRXMonitorSection" style="display: none;">
+    <p>
+      <span class="customeHeadings">RX Monitor</span>
+    </p>
+    <p>
+      <table style="width:100%" id="tableRXMonitor">
+        <tr>
+          <th>Packet</th>
+          <th>Count</th>
+          <th>Freqauncy</th>
+          <th>Time</th>
+        </tr>
+      </table> 
+    </p>
+    <button id="buttonRXMonitorClear" type="button" >Clear</button>
+    <button id="buttonRXMonitorCopyToCB" type="button" style="float: right;">Copy to Clipboard</button>
+  </div>
+  <!-- ############################################################## -->
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="serialHandler.js"></script>
   <script type="text/javascript" src="userInteraction.js"></script>
@@ -442,7 +468,7 @@ Enter ?+ to place an incrementing byte
   <script type="text/javascript" src="protocolRoutineCustom.js"></script>
   <script type="text/javascript" src="checksumParity.js"></script>
   <script type="text/javascript" src="bufferFxn.js"></script>
-  
+  <script type="text/javascript" src="classRxMonitorRecord.js"></script>
   
   <ol id="demo"></ol>
 

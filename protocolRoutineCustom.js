@@ -17,7 +17,7 @@ function protocolRoutineTXActionCustom1(byteBuffer) {
   checkSumArray[0] =0x02;
   
   //get the length of the new array
-  for(i=0;i<(byteBufferView.length + 1);i++) { //+1 is so we check the checksum
+  for(var i=0;i<(byteBufferView.length + 1);i++) { //+1 is so we check the checksum
     
     var byteToCheck = byteBufferView[i];
     
@@ -51,7 +51,7 @@ function protocolRoutineTXActionCustom1(byteBuffer) {
   
   slippedByteBufferView[slippedByteBufferViewPntr++] = 0x02;
   
-  for(i=0;i<(byteBufferView.length+1);i++) { //+1 for the checksum
+  for(var i=0;i<(byteBufferView.length+1);i++) { //+1 for the checksum
     
     var byteToAdd = byteBufferView[i];
     
@@ -78,7 +78,7 @@ function protocolRoutineTXActionCustom1(byteBuffer) {
   
   slippedByteBufferView[slippedByteBufferViewPntr++] = 0x03;
   
-  //for(i=0;i<slippedByteBufferView.length;i++)
+  //for(var i=0;i<slippedByteBufferView.length;i++)
   //{
   //  console.log("["+slippedByteBufferView[i]+"],");
   //}
@@ -147,7 +147,7 @@ function protocolRoutineRXActionCustom1(nByte) {
         //Push to UI Section....
         var packetAsStr = "";
         
-        for(a=0;a<protocolRoutineCustom1RXData.length;a++)
+        for(var a=0;a<protocolRoutineCustom1RXData.length;a++)
         {
           packetAsStr += getByteInUserSelectedFormat(protocolRoutineCustom1RXData[a]);
         }

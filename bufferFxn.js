@@ -15,7 +15,7 @@ function appendByteToBuffer(byteBuffer,newByte) {
   var outputByteBufferViewPntr = 0;
   
   //copy data into outputBuffer
-  for(i=0;i<(byteBufferView.length);i++) { 
+  for(var i=0;i<(byteBufferView.length);i++) { 
         
     var byteToAdd = byteBufferView[i];
         
@@ -41,7 +41,7 @@ function appendBufferToBufferStart(byteBuffer,newByteBuffer) {
   var outputByteBufferViewPntr = 0;
 
   //add new data
-  for(i=0;i<newByteBufferView.length;i++){
+  for(var i=0;i<newByteBufferView.length;i++){
 
     var byteToAdd = newByteBufferView[i];
         
@@ -50,7 +50,7 @@ function appendBufferToBufferStart(byteBuffer,newByteBuffer) {
   }
   
   //copy data into outputBuffer
-  for(i=0;i<(byteBufferView.length);i++) { 
+  for(var i=0;i<(byteBufferView.length);i++) { 
         
     var byteToAdd = byteBufferView[i];
         
@@ -73,7 +73,7 @@ function appendBufferToBufferEnd(byteBuffer,newByteBuffer) {
   var outputByteBufferViewPntr = 0;
   
   //copy data into outputBuffer
-  for(i=0;i<(byteBufferView.length);i++) { 
+  for(var i=0;i<(byteBufferView.length);i++) { 
         
     var byteToAdd = byteBufferView[i];
         
@@ -81,7 +81,7 @@ function appendBufferToBufferEnd(byteBuffer,newByteBuffer) {
   }
 
   //add new data
-  for(i=0;i<newByteBufferView.length;i++){
+  for(var i=0;i<newByteBufferView.length;i++){
 
     var byteToAdd = newByteBufferView[i];
         
