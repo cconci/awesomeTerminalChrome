@@ -485,7 +485,7 @@ function processRxPacketFilterData() {
 
         rxPacketFilterCount++;
 
-        }
+        
       }
     }
 
@@ -520,6 +520,7 @@ function processRxPacketFilterData() {
 
       //update Monitor VIew
       updateMonitorView();
+    }
     
     //Reset
     rxPacketFilterCollectedDataPntr = 0;
@@ -560,6 +561,19 @@ function updateMonitorView() {
     cells[2].innerHTML = rxMonitorRecordArray[i-1].getFrequency();
     cells[3].innerHTML = rxMonitorRecordArray[i-1].getLastMessageTimeStamp();
 
+  }
+
+}
+
+function clearRxMonitor(){
+
+  //clear
+  rxMonitorRecordArray = [];
+
+  var table = document.getElementById('tableRXMonitor');
+  var rowCount = table.rows.length;
+  for (var i = 1; i < rowCount; i++) {
+      table.deleteRow(1); //always delete row 1 as the table shrinks
   }
 
 }

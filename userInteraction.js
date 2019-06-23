@@ -68,6 +68,11 @@ document.querySelector('#buttonRXFilterClear').onclick = function() {
   updateStatsCounters();
 }
 
+document.querySelector('#buttonRXMonitorClear').onclick = function() {
+      
+  clearRxMonitor();
+}
+
 document.querySelector('#buttonRefreshPorts').onclick = function() {
     
   //
@@ -375,6 +380,13 @@ document.querySelector('#buttonRXFilterCopyToCB').onclick = function() {
   //return to normal
   document.getElementById("termRXFilter").disabled = true;
 };
+
+document.querySelector('#buttonRXMonitorCopyToCB').onclick = function() {
+
+
+ //work in progress
+
+}
 
 document.querySelector('#buttonRestoreView').onclick = function() {
   
