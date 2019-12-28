@@ -251,13 +251,14 @@ function serialDisconnectCallback(result) {
 
 function readDataCallback(info) {
   
-  if(info.connectionId == connectionId){
+  if(   info.connectionId == connectionId 
+    || (document.getElementById('linkOpenPorts').checked === true)){
   
-    console.log("readDataCallback():enter");
-    console.log(info);
-    console.log(String.fromCharCode.apply(null, new Uint8Array(info.data)));
+    //console.log("readDataCallback():enter");
+    //console.log(info);
+    //console.log(String.fromCharCode.apply(null, new Uint8Array(info.data)));
     var uint8View = new Uint8Array(info.data);
-    console.log(uint8View);
+    //console.log(uint8View);
     
     //stats
     rxByteCount += uint8View.length;
